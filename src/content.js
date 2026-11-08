@@ -41,6 +41,12 @@
     calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
     power: '<path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/>',
     bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>',
+    languages: '<path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/>',
+    sparkles: '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>',
+    timeline: '<path d="M8 6h10"/><path d="M6 12h9"/><path d="M11 18h7"/>',
+    x: '<path d="M18 6 6 18M6 6l12 12"/>',
+    chevL: '<path d="m15 18-6-6 6-6"/>',
+    chevR: '<path d="m9 18 6-6-6-6"/>',
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
     upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
   };
@@ -131,6 +137,7 @@
     html.dataset.wfTheme = resolvedTheme();
     html.dataset.wfFont = settings.font;
     html.dataset.wfWidth = settings.width;
+    html.dataset.wfCover = settings.cover === false ? 'off' : 'on';
     html.style.setProperty('--wf-fs', settings.size + 'px');
     if (ui.themeBtn) {
       ui.themeBtn.replaceChildren(icon(html.dataset.wfTheme === 'dark' ? 'sun' : 'moon'));
@@ -142,6 +149,7 @@
     delete html.dataset.wfTheme;
     delete html.dataset.wfFont;
     delete html.dataset.wfWidth;
+    delete html.dataset.wfCover;
     html.style.removeProperty('--wf-fs');
   }
 
@@ -419,6 +427,8 @@
     wireKeys();
     BM.onChange(refreshBookmarkChip);
     refreshBookmarkChip();
+    wireLightbox();
+    scheduleTimeline();
     loadMeta(title, !!infobox);
 
     // jump to #fragment now that the final layout exists
@@ -543,6 +553,100 @@
 
   /* ---------------------------------------------------------------- search */
 
+  /** Language code of the wiki we are on ("en", "he", "simple"…). Falls back to <html lang> off Wikipedia (tests). */
+  function curLang() {
+    const m = location.hostname.match(/^([a-z0-9-]+)\.wikipedia\.org$/);
+    return m ? m[1] : String(html.lang || 'en').toLowerCase().split('-')[0];
+  }
+
+  /** Title search on the current wiki (same origin, so no CORS). Rows: { title, desc, thumb, href, lang: null }. */
+  async function searchHome(q, limit) {
+    try {
+      const r = await fetch('/w/rest.php/v1/search/title?limit=' + limit + '&q=' + encodeURIComponent(q));
+      if (!r.ok) return [];
+      return ((await r.json()).pages || []).map((p) => {
+        let thumb = (p.thumbnail && p.thumbnail.url) || '';
+        if (thumb.startsWith('//')) thumb = 'https:' + thumb;
+        return { title: p.title, desc: p.description || '', thumb, href: '/wiki/' + encodeURIComponent(p.key), lang: null };
+      });
+    } catch (e) {
+      return []; // offline etc.
+    }
+  }
+
+  /** Prefix search on another language's Wikipedia. The action API allows anonymous cross-origin reads with origin=*. */
+  async function searchOther(lang, q) {
+    if (!/^[a-z0-9-]{2,30}$/.test(lang)) return [];
+    try {
+      const qs = new URLSearchParams({
+        action: 'query', format: 'json', formatversion: '2', origin: '*', generator: 'prefixsearch', gpssearch: q, gpslimit: '4',
+        prop: 'pageimages|description', piprop: 'thumbnail', pithumbsize: '80',
+      });
+      const r = await fetch('https://' + lang + '.wikipedia.org/w/api.php?' + qs.toString());
+      if (!r.ok) return [];
+      const pages = (((await r.json()).query || {}).pages || []).slice().sort((a, b) => (a.index || 0) - (b.index || 0));
+      return pages.map((p) => ({
+        title: p.title,
+        desc: p.description || '',
+        thumb: (p.thumbnail && p.thumbnail.source) || '',
+        href: 'https://' + lang + '.wikipedia.org/wiki/' + encodeURIComponent(p.title.replace(/ /g, '_')),
+        lang: lang.toUpperCase(),
+      }));
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /** This wiki's results first, then the other languages interleaved (best of each language first). */
+  function mergeResults(home, others) {
+    const rows = home.slice();
+    const lists = others.map((o) => o.slice(0, 3));
+    for (let i = 0; i < 3; i++) for (const l of lists) if (l[i]) rows.push(l[i]);
+    return rows.slice(0, 9);
+  }
+
+  /** Small globe-with-letters button inside the search box: pick extra languages to search in. */
+  function buildSearchLangMenu() {
+    const outer = h('div', 'wf-pop wf-sl-pop');
+    const box = h('div');
+    box.dir = uiDir();
+    box.append(h('p', 'wf-sl-hint', t('searchLangsHint')));
+    const list = h('ul', 'wf-sl-list');
+    box.append(list);
+    outer.append(box);
+
+    const cur = curLang();
+    const rows = [];
+    const addRow = (code, name, locked) => {
+      const cb = h('input');
+      cb.type = 'checkbox';
+      if (locked) { cb.checked = true; cb.disabled = true; }
+      else cb.addEventListener('change', () => {
+        const set = new Set(settings.searchLangs || []);
+        cb.checked ? set.add(code) : set.delete(code);
+        update({ searchLangs: Array.from(set) });
+      });
+      const label = h('label', 'wf-sl-row', cb, h('span', null, name), h('small', null, code));
+      list.append(h('li', null, label));
+      if (!locked) rows.push([code, cb]);
+    };
+    addRow(cur, t('thisWiki'), true);
+    for (const [code, name] of WF.SEARCH_LANGS) if (code !== cur) addRow(code, name, false);
+
+    const menu = menuWithPopover('languages', t('searchLanguages'), outer, 'wf-sl-btn');
+    menu.classList.add('wf-search-lang');
+    const badge = h('i', 'wf-sl-count');
+    menu.querySelector('.wf-btn').append(badge);
+    syncFns.push(() => {
+      const chosen = new Set(settings.searchLangs || []);
+      rows.forEach(([code, cb]) => (cb.checked = chosen.has(code)));
+      const n = Array.from(chosen).filter((c) => c !== cur).length;
+      badge.textContent = n ? '+' + n : '';
+      badge.hidden = !n;
+    });
+    return menu;
+  }
+
   function buildSearch() {
     const wrap = h('div', 'wf-search');
     const input = h('input');
@@ -555,7 +659,7 @@
     input.spellcheck = false;
     const list = h('ul', 'wf-suggest');
     list.hidden = true;
-    wrap.append(icon('search'), input, list);
+    wrap.append(icon('search'), input, list, buildSearchLangMenu());
     ui.search = input;
 
     let token = 0;
@@ -573,24 +677,19 @@
 
     const run = debounce(async (q) => {
       const my = ++token;
-      let pages = [];
-      try {
-        const r = await fetch('/w/rest.php/v1/search/title?limit=7&q=' + encodeURIComponent(q));
-        if (r.ok) pages = (await r.json()).pages || [];
-      } catch (e) {
-        /* offline etc. */
-      }
+      const extra = (settings.searchLangs || []).filter((l) => l !== curLang());
+      const settled = await Promise.all([searchHome(q, extra.length ? 5 : 7), ...extra.map((l) => searchOther(l, q))]);
       if (my !== token || !input.value.trim()) return;
+      const rows = mergeResults(settled[0], settled.slice(1));
       list.replaceChildren();
-      for (const p of pages) {
+      for (const p of rows) {
         const a = h('a');
-        a.href = '/wiki/' + encodeURIComponent(p.key);
+        a.href = p.href;
         const th = h('div', 'wf-th');
-        if (p.thumbnail && p.thumbnail.url) {
-          const u = p.thumbnail.url.startsWith('//') ? 'https:' + p.thumbnail.url : p.thumbnail.url;
-          th.style.backgroundImage = 'url("' + u.replace(/"/g, '%22') + '")';
-        }
-        a.append(th, h('div', 'wf-st', h('b', null, p.title), h('span', null, p.description || '')));
+        if (p.thumb && /^https:\/\//.test(p.thumb)) th.style.backgroundImage = 'url("' + p.thumb.replace(/"/g, '%22') + '")';
+        const title = h('b', null, p.title);
+        if (p.lang) title.append(h('em', 'wf-sl-badge', p.lang));
+        a.append(th, h('div', 'wf-st', title, h('span', null, p.desc || '')));
         list.append(h('li', null, a));
       }
       const q2 = h('a');
@@ -697,15 +796,17 @@
 
     pop.append(seg([['narrow', 'widthNarrow'], ['medium', 'widthMedium'], ['wide', 'widthWide']], 'width', 'width'));
 
-    const swRow = h('div', 'wf-row');
-    const sw = h('label', 'wf-switch', h('span', null, t('previews')));
-    const cb = h('input');
-    cb.type = 'checkbox';
-    cb.addEventListener('change', () => update({ previews: cb.checked }));
-    sw.append(cb);
-    swRow.append(sw);
-    syncFns.push(() => (cb.checked = !!settings.previews));
-    pop.append(swRow);
+    for (const key of ['previews', 'cover']) {
+      const swRow = h('div', 'wf-row');
+      const sw = h('label', 'wf-switch', h('span', null, t(key)));
+      const cb = h('input');
+      cb.type = 'checkbox';
+      cb.addEventListener('change', () => update({ [key]: cb.checked }));
+      sw.append(cb);
+      swRow.append(sw);
+      syncFns.push(() => (cb.checked = settings[key] !== false));
+      pop.append(swRow);
+    }
 
     const langRow = h('div', 'wf-row');
     langRow.append(h('span', 'wf-label', t('uiLanguage')));
@@ -824,7 +925,8 @@
     const grid = h('div', 'wf-hero-grid');
     const text = h('div', 'wf-hero-text');
     grid.append(text);
-    hero.append(grid);
+    ui.panels = h('div', 'wf-panels'); // summary / timeline cards open here, under the title block
+    hero.append(grid, ui.panels);
 
     if (redirected) {
       const r = h('div', 'wf-redirected');
@@ -854,6 +956,19 @@
     bm.addEventListener('click', toggleBookmark);
     actions.append(bm);
     ui.bmChip = bm;
+    const sum = h('button', 'wf-chip wf-sum-chip', icon('sparkles'), h('span', null, t('summary')));
+    sum.type = 'button';
+    sum.setAttribute('aria-expanded', 'false');
+    sum.addEventListener('click', toggleSummary);
+    actions.append(sum);
+    ui.sumChip = sum;
+    const tl = h('button', 'wf-chip wf-tl-chip', icon('timeline'), h('span', null, t('timeline')));
+    tl.type = 'button';
+    tl.hidden = true; // shown once enough dated events were found
+    tl.setAttribute('aria-expanded', 'false');
+    tl.addEventListener('click', toggleTimeline);
+    actions.append(tl);
+    ui.tlChip = tl;
     if ('speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
       const listen = h('button', 'wf-chip', icon('volume'), h('span', null, t('listen')));
       listen.type = 'button';
@@ -868,6 +983,309 @@
 
     ui.heroGrid = grid;
     return hero;
+  }
+
+  /* ---------------------------------------------------------------- panels: summary + timeline */
+
+  const SUM = WF.summary;
+  const TL = WF.timeline;
+  let blocksCache = null;
+  let tlEvents = [];
+  const panels = { sum: null, tl: null, sumDone: false, sumRunning: false };
+
+  function getBlocks() {
+    if (!blocksCache) {
+      const root = document.querySelector('#wf-root .wf-article .mw-parser-output');
+      blocksCache = root ? TL.collectBlocks(root) : [];
+    }
+    return blocksCache;
+  }
+
+  function makePanel(cls, iconName, title, chip) {
+    const el = h('section', 'wf-panel ' + cls);
+    el.hidden = true;
+    const sub = h('span', 'wf-panel-sub');
+    const x = h('button', 'wf-panel-x', icon('x'));
+    x.type = 'button';
+    x.title = t('close');
+    x.setAttribute('aria-label', t('close'));
+    const body = h('div', 'wf-panel-body');
+    el.append(h('div', 'wf-panel-head', icon(iconName), h('b', null, title), sub, x), body);
+    const p = { el, body, sub, chip };
+    x.addEventListener('click', () => setPanel(p, false));
+    ui.panels.append(el);
+    return p;
+  }
+
+  function setPanel(p, open) {
+    p.el.hidden = !open;
+    p.chip.setAttribute('aria-expanded', String(open));
+    p.chip.classList.toggle('on', open);
+  }
+
+  /* ---- summary (Chrome's on-device AI when present, the article's own opening otherwise) ---- */
+
+  function toggleSummary() {
+    if (!panels.sum) panels.sum = makePanel('wf-sum', 'sparkles', t('summary'), ui.sumChip);
+    const open = panels.sum.el.hidden;
+    setPanel(panels.sum, open);
+    if (open && !panels.sumDone && !panels.sumRunning) runSummary(panels.sum);
+  }
+
+  function renderItems(out, items) {
+    out.replaceChildren();
+    let ul = null;
+    for (const it of items) {
+      if (it.bullet) {
+        if (!ul) { ul = h('ul'); out.append(ul); }
+        ul.append(h('li', null, it.text));
+      } else {
+        ul = null;
+        out.append(h('p', null, it.text));
+      }
+    }
+  }
+
+  /** What we show when the on-device model can't be used: the article's own opening, plus a short explanation. */
+  function summaryFallback(p, msg) {
+    p.body.replaceChildren(h('p', 'wf-panel-msg', msg), h('h4', null, t('leadHeading')), h('p', 'wf-lead', SUM.leadSummary(getBlocks(), 3) || '—'));
+    panels.sumDone = true;
+  }
+
+  async function runSummary(p) {
+    panels.sumRunning = true;
+    p.body.replaceChildren(h('p', 'wf-panel-status', t('summaryLoading')));
+    let chk;
+    try {
+      chk = await SUM.check(pageLang);
+    } catch (e) {
+      chk = { state: 'unavailable' };
+    }
+    if (!['available', 'downloadable', 'downloading'].includes(chk.state)) {
+      panels.sumRunning = false;
+      return summaryFallback(p, t('summaryUnsupported'));
+    }
+    if (chk.state === 'downloadable') {
+      // The model is several GB: never download it without an explicit click (which also provides the user activation Chrome requires).
+      const go = h('button', 'wf-chip', icon('download'), t('summaryDownloadGo'));
+      go.type = 'button';
+      go.addEventListener('click', () => summarize(p, chk));
+      p.body.replaceChildren(h('p', 'wf-panel-msg', t('summaryDownloadAsk')), go);
+      panels.sumRunning = false;
+      return;
+    }
+    return summarize(p, chk);
+  }
+
+  async function summarize(p, chk) {
+    panels.sumRunning = true;
+    const blocks = getBlocks();
+    const status = h('p', 'wf-panel-status', t('summaryLoading'));
+    const out = h('div', 'wf-sum-out');
+    const note = h('p', 'wf-panel-note', t('summaryNote'));
+    p.body.replaceChildren(status, out);
+    const fallback = (msg) => summaryFallback(p, msg);
+    try {
+      out.lang = chk.opts.outputLanguage;
+      out.dir = 'ltr';
+      const text = await SUM.run(SUM.articleText(blocks, 24000), {
+        opts: chk.opts,
+        context: pageBm ? pageBm.title : '',
+        onProgress: (f) => { status.hidden = false; status.textContent = t('summaryDownloading', { p: Math.round((f || 0) * 100) }); },
+        onChunk: (acc) => { status.hidden = true; renderItems(out, SUM.mdToItems(acc)); },
+      });
+      if (!text.trim()) return fallback(t('summaryFailed'));
+      status.hidden = true;
+      p.body.append(note);
+      panels.sumDone = true;
+    } catch (e) {
+      console.warn('[WikiFree] summary failed', e);
+      fallback(t('summaryFailed'));
+    } finally {
+      panels.sumRunning = false;
+    }
+  }
+
+  /* ---- timeline (dated sentences picked from the text) ---- */
+
+  function scheduleTimeline() {
+    const go = () => {
+      try {
+        tlEvents = TL.extractEvents(getBlocks());
+        if (tlEvents.length >= 4 && ui.tlChip) ui.tlChip.hidden = false;
+      } catch (e) {
+        console.warn('[WikiFree] timeline failed', e);
+      }
+    };
+    (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(go);
+  }
+
+  function jumpTo(el) {
+    if (!el || !el.isConnected) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('wf-flash');
+    setTimeout(() => el.classList.remove('wf-flash'), 2200);
+  }
+
+  function toggleTimeline() {
+    if (!panels.tl) {
+      const p = makePanel('wf-tlp', 'timeline', t('timeline'), ui.tlChip);
+      p.sub.textContent = t('timelineCount', { n: tlEvents.length });
+      const ol = h('ol', 'wf-tl');
+      for (const ev of tlEvents) {
+        const btn = h('button', null, h('span', 'wf-tl-year', String(ev.year)), h('span', 'wf-tl-text', ev.text), ev.section ? h('small', 'wf-tl-sec', ev.section) : null);
+        btn.type = 'button';
+        btn.addEventListener('click', () => jumpTo(ev.el));
+        ol.append(h('li', 'wf-tl-item', btn));
+      }
+      p.body.append(ol, h('p', 'wf-panel-note', t('timelineNote')));
+      panels.tl = p;
+    }
+    setPanel(panels.tl, panels.tl.el.hidden);
+  }
+
+  /* ---------------------------------------------------------------- cover photo + image lightbox */
+
+  const STD_SIZES = [1920, 1280, 960, 500]; // widths Wikimedia's thumbnailer serves
+
+  /** A larger version of a Wikimedia thumbnail URL, never wider than the original file. */
+  function scaleThumb(src, fileWidth) {
+    const m = String(src).match(/^(.*\/thumb\/.+\/)(\d+)px-([^/]+)$/);
+    const fw = Number(fileWidth);
+    if (m && fw) {
+      const size = STD_SIZES.find((s) => s <= fw);
+      if (size && size > Number(m[2])) return m[1] + size + 'px-' + m[3];
+    }
+    return src;
+  }
+
+  function addCover(th, original) {
+    if (!ui.panels || ui.panels.parentNode.querySelector('.wf-cover')) return;
+    const fig = h('figure', 'wf-cover');
+    const img = h('img');
+    img.src = th.source;
+    img.alt = '';
+    img.decoding = 'async';
+    img.addEventListener('click', () =>
+      openLightbox([{ src: th.source, big: scaleThumb(th.source, original && original.width), caption: '', href: '', alt: '' }], 0)
+    );
+    fig.append(img);
+    ui.panels.before(fig);
+  }
+
+  const lb = { el: null, items: [], i: 0, prevFocus: null };
+
+  function lightboxItems() {
+    const out = [];
+    const sel = '#wf-root :is(.wf-article, .wf-aside) :is(a.image, a.mw-file-description)';
+    document.querySelectorAll(sel).forEach((a) => {
+      const img = a.querySelector('img');
+      if (!img || a.closest('.navbox, .sidebar, .ambox, .mbox-small, .metadata, .noviewer')) return;
+      const w = Number(img.getAttribute('width')) || img.naturalWidth || 0;
+      if (w && w < 100) return; // icons, flags, bullets
+      const box = a.closest('.thumb, figure, .gallerybox, .infobox-image, td');
+      const cap = box && box.querySelector('.thumbcaption, figcaption, .gallerytext, .infobox-caption');
+      out.push({
+        a,
+        src: img.currentSrc || img.src,
+        big: scaleThumb(img.currentSrc || img.src, img.getAttribute('data-file-width')),
+        caption: ((cap && cap.textContent) || img.alt || '').replace(/\s+/g, ' ').trim(),
+        href: a.href,
+        alt: img.alt || '',
+      });
+    });
+    return out;
+  }
+
+  function ensureLightbox() {
+    if (lb.el) return;
+    const rtl = ui.root.dir === 'rtl';
+    const el = h('div', 'wf-lb');
+    el.hidden = true;
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    lb.img = h('img');
+    lb.cap = h('figcaption');
+    lb.cap.dir = 'auto';
+    lb.counter = h('span');
+    lb.link = h('a', null, icon('external'), t('fileDetails'));
+    lb.link.target = '_blank';
+    lb.link.rel = 'noopener';
+    const fig = h('figure', 'wf-lb-fig', lb.img, lb.cap, h('div', 'wf-lb-meta', lb.counter, lb.link));
+    const mk = (cls, ic, label, fn) => {
+      const b = h('button', 'wf-lb-btn ' + cls, icon(ic));
+      b.type = 'button';
+      b.title = label;
+      b.setAttribute('aria-label', label);
+      b.addEventListener('click', (e) => { e.stopPropagation(); fn(); });
+      return b;
+    };
+    lb.close = mk('wf-lb-x', 'x', t('close'), closeLightbox);
+    // left/right buttons follow the reading direction of the page
+    lb.left = mk('wf-lb-left', 'chevL', rtl ? t('lbNext') : t('lbPrev'), () => stepLb(rtl ? 1 : -1));
+    lb.right = mk('wf-lb-right', 'chevR', rtl ? t('lbPrev') : t('lbNext'), () => stepLb(rtl ? -1 : 1));
+    el.append(fig, lb.close, lb.left, lb.right);
+    el.addEventListener('click', (e) => { if (e.target === el) closeLightbox(); });
+    el.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+    ui.root.append(el);
+    lb.el = el;
+  }
+
+  function showLb() {
+    const it = lb.items[lb.i];
+    lb.img.onerror = () => { if (lb.img.getAttribute('src') !== it.src) lb.img.src = it.src; };
+    lb.img.alt = it.alt || '';
+    lb.img.src = it.big;
+    lb.cap.textContent = it.caption;
+    lb.cap.hidden = !it.caption;
+    lb.link.hidden = !it.href;
+    if (it.href) lb.link.href = it.href;
+    const n = lb.items.length;
+    lb.counter.textContent = n > 1 ? lb.i + 1 + ' / ' + n : '';
+    lb.left.hidden = lb.right.hidden = n < 2;
+  }
+
+  function openLightbox(items, i) {
+    ensureLightbox();
+    lb.items = items;
+    lb.i = i;
+    lb.prevFocus = document.activeElement;
+    hideCard();
+    showLb();
+    lb.el.hidden = false;
+    lb.close.focus();
+  }
+
+  function stepLb(d) {
+    const n = lb.items.length;
+    if (n < 2) return;
+    lb.i = (lb.i + d + n) % n;
+    showLb();
+  }
+
+  function closeLightbox() {
+    if (!lb.el || lb.el.hidden) return;
+    lb.el.hidden = true;
+    lb.img.removeAttribute('src');
+    if (lb.prevFocus && lb.prevFocus.focus) lb.prevFocus.focus();
+  }
+
+  function wireLightbox() {
+    ui.root.addEventListener(
+      'click',
+      (e) => {
+        if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+        const a = e.target.closest && e.target.closest('.wf-article a, .wf-aside a');
+        if (!a || !a.querySelector('img')) return;
+        const items = lightboxItems();
+        const idx = items.findIndex((x) => x.a === a);
+        if (idx < 0) return; // small or excluded image: let the link behave normally
+        e.preventDefault();
+        e.stopPropagation(); // also keeps Wikipedia's own media viewer from opening on top of ours
+        openLightbox(items, idx);
+      },
+      true
+    );
   }
 
   /* ---------------------------------------------------------------- table of contents */
@@ -989,6 +1407,15 @@
 
   function wireKeys() {
     document.addEventListener('keydown', (e) => {
+      if (lb.el && !lb.el.hidden) {
+        // the lightbox owns the keyboard while it is open
+        if (e.key === 'Escape') closeLightbox();
+        else if (e.key === 'ArrowLeft') stepLb(ui.root.dir === 'rtl' ? 1 : -1);
+        else if (e.key === 'ArrowRight') stepLb(ui.root.dir === 'rtl' ? -1 : 1);
+        else return;
+        e.preventDefault();
+        return;
+      }
       const tag = (e.target.tagName || '').toLowerCase();
       const typing = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
       if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
@@ -1011,7 +1438,7 @@
       const q = new URLSearchParams({
         action: 'query', format: 'json', formatversion: '2', redirects: '1', titles: title,
         prop: 'langlinks|pageimages|description|revisions', lllimit: 'max', llprop: 'url|autonym|langname',
-        piprop: 'thumbnail', pithumbsize: '700', rvprop: 'timestamp',
+        piprop: 'thumbnail|original', pithumbsize: '960', rvprop: 'timestamp',
       });
       const r = await fetch('/w/api.php?' + q.toString());
       if (r.ok) page = ((await r.json()).query || {}).pages;
@@ -1022,7 +1449,6 @@
     if (!page) return;
 
     if (page.description) ui.desc.textContent = page.description;
-    if (page.thumbnail && page.thumbnail.source) meta.thumb = page.thumbnail.source;
 
     const ts = page.revisions && page.revisions[0] && page.revisions[0].timestamp;
     if (ts) {
@@ -1036,12 +1462,19 @@
       ui.edited.hidden = false;
     }
 
-    if (!hasInfobox && page.thumbnail && page.thumbnail.source) {
-      const img = h('img', 'wf-hero-img');
-      img.src = page.thumbnail.source;
-      img.alt = '';
-      img.decoding = 'async';
-      ui.heroGrid.append(img);
+    const th = page.thumbnail;
+    if (th && th.source) {
+      meta.thumb = th.source;
+      const landscape = th.width && th.height && th.width / th.height >= 1.25;
+      if (landscape) {
+        addCover(th, page.original); // wide photo: full-width banner under the title
+      } else if (!hasInfobox) {
+        const img = h('img', 'wf-hero-img'); // portrait/square lead image: small picture beside the title
+        img.src = th.source;
+        img.alt = '';
+        img.decoding = 'async';
+        ui.heroGrid.append(img);
+      }
     }
 
     ui.langs = (page.langlinks || []).slice();

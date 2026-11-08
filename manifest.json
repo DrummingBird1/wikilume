@@ -23,7 +23,7 @@
     {
       "matches": ["*://*.wikipedia.org/*"],
       "exclude_matches": ["*://*.m.wikipedia.org/*"],
-      "js": ["src/i18n.js", "src/bookmarks.js", "src/content.js"],
+      "js": ["src/i18n.js", "src/bookmarks.js", "src/timeline.js", "src/summary.js", "src/content.js"],
       "css": ["src/reader.css"],
       "run_at": "document_start"
     }

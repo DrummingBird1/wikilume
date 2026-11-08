@@ -8,7 +8,14 @@ browser extension (manifest v3)
 
 ## הרצה ובדיקות
 
-- לא תועד. להשלים כשחוזרים לעבוד על הפרויקט.
+- אין `package.json` ואין תלויות. כל הסקריפטים רצים עם Node בלבד, ואין מה להתקין.
+- טעינה בדפדפן: `chrome://extensions` ← Developer mode ← Load unpacked ← שורש הפרויקט (התיקייה עם `manifest.json`). אחרי שינוי: כפתור הרענון בכרטיס התוסף ורענון הלשונית.
+- בדיקות יחידה: `node --test test/*.test.js` (בלי תיקייה כארגומנט, ב-Node 24 זה נכשל). בדיקת תחביר: `node --check src/content.js` ושאר הקבצים.
+- בדיקת קצה לקצה, בלי לגעת בוויקיפדיה האמיתית: `node test/e2e/mock-server.js` (שרת דמה על פורט 8767, בטרמינל נפרד או ברקע), ואז `node test/e2e/chrome-features.js` ו-`node test/e2e/chrome-bookmarks.js`. הם מפעילים Chrome בלי ממשק עם פרופיל זמני, טוענים את התוסף, מיירטים בקשות ל-`*.wikipedia.org` ועונים להן מקומית. אם Chrome לא ב-`C:/Program Files/Google/Chrome/Application/chrome.exe`, מגדירים `CHROME_PATH`.
+- דף הדמה כתוב ביד ומחקה את מבנה ה-DOM של ויקיפדיה. הוא לא מחליף בדיקה על ערכים אמיתיים (תבניות, סקינים אחרים, משתמש מחובר).
+- אריזה: `node tools/pack.js` ← `dist/` (לא בגיט). אייקונים: `node tools/make-icons.js`.
+- הדפדפן המובנה באפליקציית Claude חוסם את wikipedia.org, ולכן בדיקה על ויקיפדיה אמיתית דורשת את Chrome של המשתמש.
+- הסיכום המקומי (`src/summary.js`) לא מוריד מודל בלי קליק מפורש. בבדיקות אוטומטיות אין ללחוץ על "להוריד ולסכם": זו הורדה של כמה ג׳יגה.
 
 ## מצב הריפו
 

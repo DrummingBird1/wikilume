@@ -58,3 +58,6 @@ Thumbs.db
 *.gguf
 *.ckpt
 # --- end shared block ---
+
+# build output
+dist/

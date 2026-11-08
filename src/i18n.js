@@ -64,6 +64,26 @@
       bmImportError: 'This is not a valid WikiFree export file.',
       tabSaved: 'Bookmarks',
       tabSettings: 'Settings',
+      summary: 'Summary',
+      timeline: 'Timeline',
+      close: 'Close',
+      summaryLoading: 'Summarizing on your device…',
+      summaryDownloading: 'Downloading the on-device model… {p}%',
+      summaryNote: 'Generated on your device by Chrome’s built-in AI. Nothing is sent anywhere, and it can make mistakes.',
+      summaryUnsupported: 'On-device summaries are not available here: they need a recent desktop Chrome with built-in AI, and a supported language. Showing the article’s opening instead.',
+      summaryFailed: 'Could not create a summary. Showing the article’s opening instead.',
+      summaryDownloadAsk: 'Summaries are written on your device. Chrome first has to download its built-in AI model once, which is a few GB. Continue?',
+      summaryDownloadGo: 'Download and summarize',
+      leadHeading: 'From the article’s opening',
+      timelineNote: 'Dates picked automatically from the article text, so some may be missed or misread. Click an event to jump to it.',
+      timelineCount: '{n} events',
+      searchLanguages: 'Search in more languages',
+      searchLangsHint: 'Results from the languages you tick appear next to results from this Wikipedia.',
+      thisWiki: 'This Wikipedia',
+      cover: 'Wide cover photo',
+      lbPrev: 'Previous image',
+      lbNext: 'Next image',
+      fileDetails: 'File page',
       about: 'WikiFree is free and open. Wikipedia content is licensed CC BY-SA 4.0.',
     },
     he: {
@@ -126,6 +146,26 @@
       bmImportError: 'הקובץ אינו ייצוא תקין של WikiFree.',
       tabSaved: 'סימניות',
       tabSettings: 'הגדרות',
+      summary: 'סיכום',
+      timeline: 'ציר זמן',
+      close: 'סגירה',
+      summaryLoading: 'מסכם במחשב שלך…',
+      summaryDownloading: 'מוריד את המודל המקומי… {p}%',
+      summaryNote: 'נוצר במחשב שלך על ידי ה-AI המובנה של Chrome. שום דבר לא נשלח החוצה, והוא עלול לטעות.',
+      summaryUnsupported: 'סיכום מקומי לא זמין כאן: הוא דורש Chrome עדכני בדסקטופ עם AI מובנה, ושפה נתמכת. מוצג פתיח הערך במקום.',
+      summaryFailed: 'לא הצלחתי ליצור סיכום. מוצג פתיח הערך במקום.',
+      summaryDownloadAsk: 'הסיכום נכתב במחשב שלך. קודם Chrome צריך להוריד פעם אחת את מודל ה-AI המובנה שלו, כמה ג׳יגה. להמשיך?',
+      summaryDownloadGo: 'להוריד ולסכם',
+      leadHeading: 'מתוך פתיח הערך',
+      timelineNote: 'תאריכים שנבחרו אוטומטית מטקסט הערך, ולכן ייתכנו החמצות וטעויות. לחיצה על אירוע קופצת אליו.',
+      timelineCount: '{n} אירועים',
+      searchLanguages: 'חיפוש בשפות נוספות',
+      searchLangsHint: 'תוצאות מהשפות שסימנתם יופיעו לצד תוצאות הוויקיפדיה הנוכחית.',
+      thisWiki: 'הוויקיפדיה הנוכחית',
+      cover: 'תמונת קאבר רחבה',
+      lbPrev: 'התמונה הקודמת',
+      lbNext: 'התמונה הבאה',
+      fileDetails: 'דף הקובץ',
       about: 'WikiFree חינמי ופתוח. התוכן של ויקיפדיה ברישיון CC BY-SA 4.0.',
     },
   };
@@ -137,8 +177,19 @@
     size: 18, // px
     width: 'medium', // narrow | medium | wide
     previews: true,
+    cover: true, // wide cover photo above the article when the lead image is landscape
+    searchLangs: [], // extra Wikipedia language codes to search alongside the current one
     uiLang: 'auto', // auto | en | he
   };
+
+  /** Languages offered for multi-language search: [code, name in its own language]. */
+  const SEARCH_LANGS = [
+    ['en', 'English'], ['he', 'עברית'], ['ar', 'العربية'], ['ru', 'Русский'], ['es', 'Español'], ['fr', 'Français'], ['de', 'Deutsch'],
+    ['it', 'Italiano'], ['pt', 'Português'], ['nl', 'Nederlands'], ['pl', 'Polski'], ['uk', 'Українська'], ['tr', 'Türkçe'], ['fa', 'فارسی'],
+    ['ja', '日本語'], ['zh', '中文'], ['ko', '한국어'], ['sv', 'Svenska'], ['cs', 'Čeština'], ['hu', 'Magyar'], ['ro', 'Română'],
+    ['el', 'Ελληνικά'], ['fi', 'Suomi'], ['da', 'Dansk'], ['no', 'Norsk'], ['bg', 'Български'], ['sr', 'Српски'], ['hr', 'Hrvatski'],
+    ['ca', 'Català'], ['id', 'Bahasa Indonesia'], ['vi', 'Tiếng Việt'], ['th', 'ไทย'], ['hi', 'हिन्दी'], ['simple', 'Simple English'],
+  ];
 
   /** Resolve 'auto' to a concrete UI language. */
   function resolveLang(pref, pageLang) {
@@ -201,5 +252,5 @@
     });
   }
 
-  global.WF = { STRINGS, DEFAULTS, resolveLang, makeT, loadSettings, saveSettings, onSettingsChanged };
+  global.WF = { STRINGS, DEFAULTS, SEARCH_LANGS, resolveLang, makeT, loadSettings, saveSettings, onSettingsChanged };
 })(typeof globalThis !== 'undefined' ? globalThis : window);
