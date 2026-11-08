@@ -26,3 +26,26 @@ h1 { margin: 0; font-size: 18px; letter-spacing: -0.01em; }
 .seg button[aria-pressed="true"] { background: var(--bg); color: var(--accent); font-weight: 650; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
 select { width: 100%; height: 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); padding: 0 10px; font: inherit; }
 footer { display: flex; flex-direction: column; gap: 4px; color: var(--muted); font-size: 12px; }
+[hidden] { display: none !important; }
+.panel { display: flex; flex-direction: column; gap: 14px; }
+
+/* bookmarks tab (row markup comes from src/bookmarks.js) */
+#bmFilter { width: 100%; height: 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); padding: 0 12px; font: inherit; outline: none; }
+#bmFilter:focus { border-color: var(--accent); }
+.wf-bmlist { list-style: none; margin: 0; padding: 0; max-height: 300px; overflow: auto; }
+.empty { margin: 4px 2px; color: var(--muted); line-height: 1.5; }
+.wf-bm-item { display: flex; align-items: center; gap: 4px; border-radius: 12px; }
+.wf-bm-item:hover { background: var(--surface); }
+.wf-bm-link { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 7px 8px; color: var(--text); text-decoration: none; }
+.wf-bm-th { flex: none; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 9px; background: var(--surface) center / cover no-repeat; border: 1px solid var(--border); color: var(--muted); font-weight: 700; font-size: 17px; text-transform: uppercase; }
+.wf-bm-text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+.wf-bm-text b { font-weight: 600; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wf-bm-text span { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wf-bm-lang { flex: none; padding: 1px 6px; border-radius: 6px; background: var(--surface); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.wf-bm-item:hover .wf-bm-lang { background: var(--bg); }
+.wf-bm-rm { flex: none; width: 30px; height: 30px; border: 0; border-radius: 50%; background: transparent; color: var(--muted); font-size: 20px; line-height: 1; cursor: pointer; }
+.wf-bm-rm:hover { background: var(--bg); color: #d64545; }
+.bm-foot { padding-top: 10px; border-top: 1px solid var(--border); }
+.bm-foot button { width: 100%; height: 34px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-size: 13.5px; cursor: pointer; }
+.bm-foot button:hover:not(:disabled) { border-color: var(--accent); }
+.bm-foot button:disabled { opacity: .45; cursor: default; }

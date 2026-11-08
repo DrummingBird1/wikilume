@@ -40,6 +40,9 @@
     up: '<path d="m18 15-6-6-6 6"/>',
     calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
     power: '<path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/>',
+    bookmark: '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+    upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
   };
 
   function icon(name) {
@@ -107,6 +110,9 @@
   let reloading = false;
   let built = false;
   const ui = {}; // references to chrome elements, set during build
+  const BM = WF.bookmarks;
+  const meta = { thumb: '' }; // lead image URL from the API, kept for saving a bookmark
+  let pageBm = null; // identity of the article being read: { host, key, title }
 
   const reload = () => {
     if (reloading) return;
@@ -322,6 +328,7 @@
     t = WF.makeT(uiLang);
 
     const title = getTitle(h1);
+    pageBm = { host: location.hostname, key: title, title: h1.textContent.replace(/\s+/g, ' ').trim() };
     const infobox = findInfobox(content);
     const catlinks = document.getElementById('catlinks');
     const redirected = document.querySelector('#contentSub .mw-redirectedfrom');
@@ -410,6 +417,8 @@
     wireScroll(toc);
     wirePreviews();
     wireKeys();
+    BM.onChange(refreshBookmarkChip);
+    refreshBookmarkChip();
     loadMeta(title, !!infobox);
 
     // jump to #fragment now that the final layout exists
@@ -505,6 +514,9 @@
     const langMenu = menuWithPopover('globe', t('languages'), langPop);
     ui.langMenu = langMenu;
     inner.append(langMenu);
+
+    // saved articles
+    inner.append(buildBookmarksMenu());
 
     // theme quick toggle
     const themeBtn = h('button', 'wf-btn');
@@ -729,6 +741,81 @@
     return outer;
   }
 
+  /* ---------------------------------------------------------------- bookmarks */
+
+  function bestThumb() {
+    if (meta.thumb) return meta.thumb;
+    const im = document.querySelector('.wf-aside .infobox img');
+    return im ? im.src : '';
+  }
+
+  async function toggleBookmark() {
+    if (!pageBm) return;
+    const id = BM.idFor(pageBm.host, pageBm.key);
+    if (await BM.has(id)) await BM.remove(id);
+    else await BM.add({ host: pageBm.host, key: pageBm.key, title: pageBm.title, desc: ui.desc ? ui.desc.textContent : '', thumb: bestThumb(), added: Date.now() });
+  }
+
+  async function refreshBookmarkChip() {
+    if (!pageBm || !ui.bmChip) return;
+    const saved = await BM.has(BM.idFor(pageBm.host, pageBm.key));
+    ui.bmChip.classList.toggle('saved', saved);
+    ui.bmChip.setAttribute('aria-pressed', String(saved));
+    ui.bmChip.replaceChildren(icon('bookmark'), h('span', null, t(saved ? 'saved' : 'save')));
+  }
+
+  function buildBookmarksMenu() {
+    const outer = h('div', 'wf-pop wf-bm-pop');
+    const box = h('div');
+    box.dir = uiDir();
+    outer.append(box);
+
+    const head = h('div', 'wf-bm-head');
+    const heading = h('b');
+    head.append(heading);
+    const input = h('input');
+    input.type = 'text';
+    input.placeholder = t('bmFilter');
+    input.setAttribute('aria-label', t('bmFilter'));
+    const list = h('ul', 'wf-bmlist');
+    const empty = h('p', 'wf-bm-empty');
+    const foot = h('div', 'wf-bm-foot');
+    const exportBtn = h('button', null, icon('download'), t('bmExport'));
+    exportBtn.type = 'button';
+    const importBtn = h('button', null, icon('upload'), t('bmImport'));
+    importBtn.type = 'button';
+    foot.append(exportBtn, importBtn);
+    const msg = h('p', 'wf-bm-msg');
+    box.append(head, input, list, empty, foot, msg);
+
+    let all = [];
+    const render = async () => {
+      all = await BM.list();
+      heading.textContent = t('bookmarks') + (all.length ? ' (' + all.length + ')' : '');
+      const q = input.value.trim();
+      const shown = all.filter((e) => BM.matches(e, q));
+      BM.renderList(list, shown, { t, onRemove: (e) => BM.remove(BM.idOf(e)) });
+      input.hidden = !all.length;
+      exportBtn.disabled = !all.length;
+      empty.hidden = !!shown.length;
+      empty.textContent = all.length ? t('noResults') : t('bmEmpty');
+    };
+    input.addEventListener('input', render);
+    exportBtn.addEventListener('click', () => {
+      BM.download('wikifree-bookmarks-' + new Date().toISOString().slice(0, 10) + '.json', BM.exportJSON(all));
+    });
+    importBtn.addEventListener('click', () => {
+      msg.textContent = '';
+      BM.pickFile()
+        .then((text) => BM.importJSON(text))
+        .then((r) => { msg.textContent = t('bmImported', r); })
+        .catch((err) => { if (err && err.message !== 'cancelled') msg.textContent = t('bmImportError'); });
+    });
+    BM.onChange(render);
+    render();
+    return menuWithPopover('bookmark', t('bookmarks'), outer);
+  }
+
   /* ---------------------------------------------------------------- hero */
 
   function buildHero(h1, redirected, words, title) {
@@ -761,6 +848,12 @@
     text.append(meta);
 
     const actions = h('div', 'wf-actions');
+    const bm = h('button', 'wf-chip wf-bm-chip', icon('bookmark'), h('span', null, t('save')));
+    bm.type = 'button';
+    bm.setAttribute('aria-pressed', 'false');
+    bm.addEventListener('click', toggleBookmark);
+    actions.append(bm);
+    ui.bmChip = bm;
     if ('speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined') {
       const listen = h('button', 'wf-chip', icon('volume'), h('span', null, t('listen')));
       listen.type = 'button';
@@ -929,6 +1022,7 @@
     if (!page) return;
 
     if (page.description) ui.desc.textContent = page.description;
+    if (page.thumbnail && page.thumbnail.source) meta.thumb = page.thumbnail.source;
 
     const ts = page.revisions && page.revisions[0] && page.revisions[0].timestamp;
     if (ts) {

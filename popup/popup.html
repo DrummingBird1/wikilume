@@ -20,32 +20,46 @@
       </div>
     </header>
 
-    <label class="row switch">
-      <span><b id="enableLabel"></b><small id="enableHint"></small></span>
-      <input type="checkbox" id="enabled">
-    </label>
+    <div class="seg" id="tabs" role="tablist"></div>
 
-    <section class="row">
-      <span class="label" id="themeLabel"></span>
-      <div class="seg" id="theme"></div>
+    <section id="panelSaved" class="panel" role="tabpanel">
+      <input type="text" id="bmFilter" autocomplete="off">
+      <ul class="wf-bmlist" id="bmList"></ul>
+      <p class="empty" id="bmEmpty"></p>
+      <div class="bm-foot">
+        <button type="button" id="bmExport"></button>
+      </div>
     </section>
 
-    <label class="row switch">
-      <span><b id="previewsLabel"></b></span>
-      <input type="checkbox" id="previews">
-    </label>
+    <section id="panelSettings" class="panel" role="tabpanel" hidden>
+      <label class="row switch">
+        <span><b id="enableLabel"></b><small id="enableHint"></small></span>
+        <input type="checkbox" id="enabled">
+      </label>
 
-    <section class="row">
-      <span class="label" id="langLabel"></span>
-      <select id="uiLang"></select>
+      <section class="row">
+        <span class="label" id="themeLabel"></span>
+        <div class="seg" id="theme"></div>
+      </section>
+
+      <label class="row switch">
+        <span><b id="previewsLabel"></b></span>
+        <input type="checkbox" id="previews">
+      </label>
+
+      <section class="row">
+        <span class="label" id="langLabel"></span>
+        <select id="uiLang"></select>
+      </section>
+
+      <footer>
+        <small id="hint"></small>
+        <small id="about"></small>
+      </footer>
     </section>
-
-    <footer>
-      <small id="hint"></small>
-      <small id="about"></small>
-    </footer>
   </main>
   <script src="../src/i18n.js"></script>
+  <script src="../src/bookmarks.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
