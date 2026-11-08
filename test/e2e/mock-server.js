@@ -4,7 +4,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const EXT = path.resolve(process.argv[2] || path.join(__dirname, '..', '..'));
-const PORT = 8767;
+const PORT = Number(process.env.MOCK_PORT) || 8767;
 
 const para = (s) => `<p>${s}</p>`;
 const LOREM = [

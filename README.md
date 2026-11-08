@@ -1,5 +1,7 @@
 # WikiFree – קריאה נקייה בוויקיפדיה (תוסף כרום, חינמי לגמרי)
 
+עברית · [English](README.en.md) · למפתחים וסוכנים: [AGENTS.md](AGENTS.md)
+
 תוסף בהשראת Wikiwand: מחליף את מעטפת ויקיפדיה בתצוגת קריאה מודרנית. **הכול חינם, בלי חשבון, בלי מנוי ובלי שרתים חיצוניים** – התוסף מדבר רק עם ה-API של ויקיפדיה עצמה.
 
 ## מה יש בפנים
@@ -43,6 +45,10 @@
 - `test/e2e/` – שרת דמה שמחקה דף ערך של ויקיפדיה וסקריפטים שמריצים את התוסף ב-Chrome אמיתי (ראו `AGENTS.md`)
 - `tools/make-icons.js` – יוצר את האייקונים (`node tools/make-icons.js`)
 - `tools/pack.js` – אורז קבצי zip להפצה (`node tools/pack.js`)
+- `tools/check.js` – בדיקות סטטיות מהירות (תחביר, הפניות ב-manifest, גרסאות, בלי נתיבים של מחשב מסוים)
+- `package.json` – רק סקריפטים, בלי תלויות: `npm run verify` (בדיקות סטטיות ויחידה), `npm run e2e` (Chrome אמיתי מול אתר דמה), `npm run pack`
+- `docs/ARCHITECTURE.md` – איך זה בנוי ולמה; `docs/BACKLOG.md` – עבודה פתוחה, סיכונים והחלטות שמחכות לבעלים
+- `GEMINI.md`, `.github/copilot-instructions.md`, `CLAUDE.md` – הפניות ל-`AGENTS.md` עבור כלים אחרים
 
 הסימניות נשמרות ב-`chrome.storage.local` (עד 10MB, עשרות אלפי ערכים) ולא ב-Sync, כי ל-Sync יש מכסה קטנה. כדי להעביר סימניות בין מחשבים משתמשים בייצוא וייבוא. קובץ ייבוא נחשב לא אמין: כל רשומה נבדקת מחדש, מתקבלים רק מארחים של `*.wikipedia.org` ותמונות מ-`upload.wikimedia.org`.
 
