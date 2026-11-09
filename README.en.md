@@ -22,6 +22,9 @@ subscription, no analytics, no third-party servers.** It talks only to Wikipedia
 2. **Load unpacked** and pick this folder (the one containing `manifest.json`)
 3. Open any Wikipedia article
 
+## Store release
+Screenshots, promo images, listing text (English and Hebrew), the privacy policy and a small project site are in [store/](store/PUBLISHING.md) and `site/`. `npm run screenshots` regenerates the images, `npm run site` the site, `npm run check-store` checks readiness.
+
 ## Develop
 Node 22+, no dependencies.
 

@@ -32,12 +32,14 @@ function findChrome() {
 }
 
 /** Copy only what ships in the extension, and let it run on the local mock site instead of wikipedia.org. */
-function prepareExtension(dest) {
+function prepareExtension(dest, real) {
   fs.mkdirSync(dest, { recursive: true });
   for (const name of ['icons', 'popup', 'src']) fs.cpSync(path.join(ROOT, name), path.join(dest, name), { recursive: true });
   const mf = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.json'), 'utf8'));
-  mf.content_scripts[0].matches = ['http://127.0.0.1/*'];
-  delete mf.content_scripts[0].exclude_matches;
+  if (!real) {
+    mf.content_scripts[0].matches = ['http://127.0.0.1/*'];
+    delete mf.content_scripts[0].exclude_matches;
+  }
   fs.writeFileSync(path.join(dest, 'manifest.json'), JSON.stringify(mf, null, 2));
 }
 
@@ -45,11 +47,11 @@ function prepareExtension(dest) {
  * Start Chrome. `intercept(request)` (optional) answers requests to *.wikipedia.org locally and returns
  * { status, headers, body } – so the tests never send traffic to Wikipedia.
  */
-async function startChrome({ intercept } = {}) {
+async function startChrome({ intercept, real } = {}) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wikifree-e2e-'));
   const extDir = path.join(tmp, 'ext');
   const profile = path.join(tmp, 'profile');
-  prepareExtension(extDir);
+  prepareExtension(extDir, real);
   const args = [
     '--headless=new', '--remote-debugging-port=0', `--user-data-dir=${profile}`, `--load-extension=${extDir}`,
     '--disable-features=DisableLoadExtensionCommandLineSwitch', '--no-first-run', '--no-default-browser-check', '--window-size=1400,900',

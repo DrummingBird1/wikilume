@@ -12,6 +12,9 @@
     "verify": "node tools/check.js && node --test test/*.test.js",
     "e2e": "node test/e2e/run.js",
     "pack": "node tools/pack.js",
-    "icons": "node tools/make-icons.js"
+    "icons": "node tools/make-icons.js",
+    "site": "node tools/build-site.js",
+    "check-store": "node tools/check-store.js",
+    "screenshots": "node tools/make-screenshots.js && node tools/make-promo.js"
   }
 }

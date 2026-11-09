@@ -3,6 +3,8 @@
 Open work, known risks and decisions waiting for the owner. Update this file when you finish or discover something.
 
 ## Before a release
+- [x] **Store assets prepared** (see `store/PUBLISHING.md`): screenshots, promo tiles, EN/HE listing text, privacy policy and project site in `site/`. Still open: name decision (`store/NAME-CHECK.md`: identical name is a live business at wikifree.com), developer account, public site URL, `[[CONTACT_URL]]` / `[[STORE_URL]]` placeholders, license. `npm run check-store` lists what blocks submission.
+- [ ] **Headless Chrome 157 did not inject the unpacked extension on https pages** (it did on `http://127.0.0.1`, which the e2e uses). Cause unknown; the store screenshots therefore go through `tools/wiki-proxy.js`. Confirm in a normal Chrome window that the extension runs on a real article before submitting.
 - [x] **Real Wikipedia, via a local test proxy** (done once, in an agent browser pane that serves real pages with the extension
   scripts injected; not a real installed extension). Checked on en/he/ar/ja articles, stubs, disambiguation, redirects, math,
   galleries, wide sports tables, Vector 2022 / legacy / Timeless / Monobook / Minerva skins, hover cards, lightbox, search in
