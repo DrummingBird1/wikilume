@@ -1,5 +1,5 @@
 # Publishes site/ (project page and privacy policy) to GitHub Pages. Needs a GitHub remote with Pages set to "GitHub Actions".
-# Has never run: the repository has no remote yet.
+# Deployed from main to https://drummingbird1.github.io/wikilume/ .
 name: pages
 on:
   push:

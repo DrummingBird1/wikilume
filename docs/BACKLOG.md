@@ -3,7 +3,7 @@
 Open work, known risks and decisions waiting for the owner. Update this file when you finish or discover something.
 
 ## Before a release
-- [x] **Store assets prepared** (see `store/PUBLISHING.md`): screenshots, promo tiles, EN/HE listing text, privacy policy and project site in `site/`. Still open: public site URL, `[[CONTACT_URL]]` / `[[STORE_URL]]` placeholders (license: MIT, done). `npm run check-store` lists what blocks submission.
+- [x] **Store assets prepared** (see `store/PUBLISHING.md`): screenshots, promo tiles, EN/HE listing text, privacy policy and project site in `site/`. Site is live at drummingbird1.github.io/wikilume. Still open: `[[CONTACT_URL]]` / `[[STORE_URL]]` placeholders (license: MIT, done). `npm run check-store` lists what blocks submission.
 - [x] **Branded Google Chrome 157 ignores `--load-extension`** (its log says "--load-extension is not allowed in Google Chrome"), so the extension never loaded there. Use Chrome for Testing (`CHROME_PATH=<...>/chrome-win64/chrome.exe`, e.g. from `~/.cache/puppeteer/chrome`). With it the extension runs on real articles (en, he, fr, ja, ar, Special:Random, Special:Search) with no script errors; Main Page and Talk pages are intentionally left alone. Still worth one look in the owner's normal Chrome.
 - [x] **Real Wikipedia, via a local test proxy** (done once, in an agent browser pane that serves real pages with the extension
   scripts injected; not a real installed extension). Checked on en/he/ar/ja articles, stubs, disambiguation, redirects, math,

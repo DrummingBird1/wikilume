@@ -17,7 +17,7 @@ Everything the store asks for is in this folder. What is left needs the owner (a
 ## What the owner has to do
 1. **Name**: WikiLume was chosen (the old name WikiFree clashed with wikifree.com; see `NAME-CHECK.md`). Search the Web Store and a trademark registry by hand before submitting.
 2. **Developer account**: the owner already has one. Open https://chrome.google.com/webstore/devconsole.
-3. **Publish the site** so the privacy policy has a public URL. `site/` is plain static HTML. Without a remote the options are: a GitHub repository with Pages (the workflow `.github/workflows/pages.yml` publishes `site/`), Netlify/Cloudflare Pages, or any static host. Creating a remote or pushing needs the owner's decision (see `AGENTS.md`).
+3. **Site is published** (GitHub Pages, deployed from `main` by `.github/workflows/pages.yml` when `site/` changes): https://drummingbird1.github.io/wikilume/ . Privacy policy URL for the dashboard: https://drummingbird1.github.io/wikilume/privacy.html . Repository: https://github.com/DrummingBird1/wikilume .
 4. **Fill the store placeholder** in `site/`: the contact link already points to the repository issue tracker. The listing address is known only after the first submission: submit, replace the `STORE_URL` placeholder in `tools/build-site.js` (in double square brackets), and run `npm run site`, then republish.
 5. **License**: MIT, see `LICENSE` (done).
 6. **Test by hand in a normal Chrome**: load unpacked, open real articles. See the checklist in `docs/BACKLOG.md` (automated runs need Chrome for Testing because branded Chrome ignores `--load-extension`; a hand check in the owner's own Chrome is still worth doing).
