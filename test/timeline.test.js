@@ -69,3 +69,24 @@ test('hebrew sentences work too', () => {
   ]);
   assert.deepEqual(ev.map((e) => e.year), [1815, 1843]);
 });
+
+test('readingMinutes counts words by language and CJK characters separately', () => {
+  const en = Array(2).fill('word '.repeat(220));
+  assert.equal(TL.readingMinutes(en, 'en'), 2);
+  assert.equal(TL.readingMinutes(['word '.repeat(170)], 'he'), 1);
+  assert.equal(TL.readingMinutes(['word '.repeat(340)], 'he'), 2, 'Hebrew and Arabic are read more slowly');
+  assert.equal(TL.readingMinutes([], 'en'), 1, 'never below one minute');
+  // a long Japanese paragraph has no spaces: it must not count as one word
+  assert.equal(TL.readingMinutes(['日本語の文章です。'.repeat(500)], 'ja'), 9);
+  assert.equal(TL.readingMinutes(['Albert Einstein（アルベルト・アインシュタイン）'], 'ja'), 1);
+});
+
+test('splitSentences keeps initials together and splits Japanese sentences that have no spaces', () => {
+  assert.deepEqual(
+    TL.splitSentences('He worked with his friend D.G. Champernowne in 1948. Then he left.'),
+    ['He worked with his friend D.G. Champernowne in 1948.', 'Then he left.']
+  );
+  assert.deepEqual(TL.splitSentences('Albert met J. Einstein in 1905. It went well.'), ['Albert met J. Einstein in 1905.', 'It went well.']);
+  assert.deepEqual(TL.splitSentences('1879年に生まれた。1880年に移住した。'), ['1879年に生まれた。', '1880年に移住した。']);
+  assert.deepEqual(TL.splitSentences('One. Two! Three?'), ['One.', 'Two!', 'Three?']);
+});

@@ -297,14 +297,14 @@
     return out;
   }
 
-  const countWords = (content) => {
-    let n = 0;
+  /** Text of the prose paragraphs (not tables, boxes or captions): the input for the reading-time estimate. */
+  const proseParagraphs = (content) => {
+    const out = [];
     content.querySelectorAll('.mw-parser-output p').forEach((p) => {
       if (p.closest('table, .navbox, .infobox, .thumb')) return;
-      const s = p.textContent.trim();
-      if (s) n += s.split(/\s+/).length;
+      out.push(p.textContent);
     });
-    return n;
+    return out;
   };
 
   const INV_SEL = [
@@ -341,7 +341,7 @@
     const catlinks = document.getElementById('catlinks');
     const redirected = document.querySelector('#contentSub .mw-redirectedfrom');
     const headings = collectHeadings(content);
-    const words = countWords(content);
+    const minutes = WF.timeline.readingMinutes(proseParagraphs(content), pageLang);
 
     const root = h('div');
     root.id = 'wf-root';
@@ -358,7 +358,7 @@
     if (headings.length < 2) layout.classList.add('wf-no-toc');
     root.append(layout);
 
-    const hero = buildHero(h1, redirected, words, title);
+    const hero = buildHero(h1, redirected, minutes, title);
     layout.append(hero);
 
     let toc = null;
@@ -431,19 +431,34 @@
     scheduleTimeline();
     loadMeta(title, !!infobox);
 
-    // jump to #fragment now that the final layout exists
+    // jump to #fragment now that the final layout exists (and again after loadMeta adds the cover/date rows above it)
+    jumpToHash();
     if (location.hash.length > 1) {
-      requestAnimationFrame(() => {
-        let target = null;
-        try {
-          target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-        } catch (e) {
-          /* ignore */
-        }
-        if (target) target.scrollIntoView({ behavior: 'instant', block: 'start' });
-      });
+      // MediaWiki scripts (collapsible boxes, lazy content) keep changing the height above the target for a moment
+      window.addEventListener('load', rejumpIfUntouched, { once: true });
+      [1200, 3000].forEach((ms) => setTimeout(rejumpIfUntouched, ms));
     }
     return true;
+  }
+
+  let hashJumpY = null; // scroll position our last #fragment jump produced; null once there is nothing to keep in place
+  function jumpToHash() {
+    if (location.hash.length <= 1) return;
+    requestAnimationFrame(() => {
+      let target = null;
+      try {
+        target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      } catch (e) {
+        /* ignore */
+      }
+      if (!target) return;
+      target.scrollIntoView({ behavior: 'instant', block: 'start' });
+      hashJumpY = window.scrollY;
+    });
+  }
+  /** Content inserted above the target after the first jump (cover banner, date row) moves it: redo the jump, unless the reader already scrolled. */
+  function rejumpIfUntouched() {
+    if (hashJumpY !== null && Math.abs(window.scrollY - hashJumpY) < 2) jumpToHash();
   }
 
   /* ---------------------------------------------------------------- header */
@@ -919,7 +934,7 @@
 
   /* ---------------------------------------------------------------- hero */
 
-  function buildHero(h1, redirected, words, title) {
+  function buildHero(h1, redirected, mins, title) {
     const hero = h('section', 'wf-hero');
     hero.id = 'wf-top';
     const grid = h('div', 'wf-hero-grid');
@@ -942,7 +957,6 @@
     text.append(ui.desc);
 
     const meta = h('div', 'wf-meta');
-    const mins = Math.max(1, Math.round(words / (/^(he|iw|ar)/.test(pageLang) ? 170 : 220)));
     meta.append(h('span', null, icon('clock'), t('readingTime', { n: mins })));
     ui.edited = h('span');
     ui.edited.hidden = true;
@@ -1454,7 +1468,7 @@
     if (ts) {
       let d = '';
       try {
-        d = new Intl.DateTimeFormat(pageLang, { dateStyle: 'long' }).format(new Date(ts));
+        d = new Intl.DateTimeFormat(uiLang, { dateStyle: 'long' }).format(new Date(ts)); // UI language, so a Hebrew label is not followed by an English date
       } catch (e) {
         d = new Date(ts).toLocaleDateString();
       }
@@ -1479,6 +1493,7 @@
 
     ui.langs = (page.langlinks || []).slice();
     renderLangs();
+    rejumpIfUntouched();
   }
 
   function renderLangs() {

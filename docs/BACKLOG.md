@@ -3,7 +3,17 @@
 Open work, known risks and decisions waiting for the owner. Update this file when you finish or discover something.
 
 ## Before a release
-- [ ] **Try it on real Wikipedia** (never done: the mock site is hand-written). Check at least:
+- [x] **Real Wikipedia, via a local test proxy** (done once, in an agent browser pane that serves real pages with the extension
+  scripts injected; not a real installed extension). Checked on en/he/ar/ja articles, stubs, disambiguation, redirects, math,
+  galleries, wide sports tables, Vector 2022 / legacy / Timeless / Monobook / Minerva skins, hover cards, lightbox, search in
+  other languages, bookmarks popup import/export, kill switch, UI language switch, RTL. It found and fixed: wide class-less
+  tables widening the page, modern `<figure typeof="mw:File/Thumb">` thumbnails staying white in dark mode, `#fragment` links
+  landing slightly low (wrong TOC highlight), reading time for Japanese/Chinese, English dates in a Hebrew UI, timeline
+  sentence splitting after initials and in Japanese.
+- [ ] **Still to do by hand in a real Chrome with the extension installed:** scroll behaviour with real frames (the agent pane
+  does not paint, so scroll-spy and smooth scrolling were only checked with a shim), print preview, logged-in sessions,
+  Wikipedia's own dark mode combined with the dark theme, and whether Wikipedia's own page previews ever appear next to ours.
+- [ ] Original checklist for that manual pass:
   - a long English article with many templates (infobox, navboxes, hatnotes, references, math)
   - a Hebrew article (RTL layout, TOC on the right, Hebrew UI)
   - a disambiguation page, a redirect (`#contentSub` note), a very short stub (no TOC)
@@ -13,6 +23,9 @@ Open work, known risks and decisions waiting for the owner. Update this file whe
   - lightbox on thumbnails, galleries and the infobox image; timeline on an article with many dates
   - search with extra languages ticked
 - [ ] Test the package in **Edge** (same zip should work) and **Firefox** (`dist/…-firefox.zip`; the add-on id is a placeholder).
+  `npm run e2e` with `CHROME_PATH` pointing at headless Edge currently fails: the summary check never settles and a bookmark
+  saved in one tab disappears once a second tab opens (Chrome passes). Unknown whether this is headless-Edge/harness-only or a
+  real storage problem, so try bookmarks in a normal Edge window first.
 - [ ] The CI workflow in `.github/workflows/ci.yml` has never run (no remote yet).
 
 ## Decisions waiting for the owner

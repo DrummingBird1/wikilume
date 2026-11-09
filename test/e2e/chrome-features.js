@@ -42,6 +42,18 @@ function intercept(req) {
     })()`);
     expect('a wide class-less table scrolls inside the column and does not widen the page', wide.tableRight <= wide.articleRight + 1 && wide.docW <= wide.vw + 1 && wide.scrolls, wide);
 
+    const fig = await tab.ev(`(() => {
+      const prevTheme = document.documentElement.dataset.wfTheme;
+      document.documentElement.dataset.wfTheme = 'dark';
+      const f = document.getElementById('modern-thumb');
+      const lum = (c) => { const m = c.match(/[\\d.]+/g).map(Number); return 0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]; };
+      const r = { figBg: getComputedStyle(f).backgroundColor, capColor: getComputedStyle(f.querySelector('figcaption')).color };
+      r.figLum = Math.round(lum(r.figBg)); r.capLum = Math.round(lum(r.capColor));
+      document.documentElement.dataset.wfTheme = prevTheme;
+      return r;
+    })()`);
+    expect('modern <figure> thumbnails follow the dark theme (dark box, light caption)', fig.figLum < 80 && fig.capLum > 110, fig);
+
     const timeline = await tab.ev(`(async () => { document.querySelector('.wf-tl-chip').click(); await new Promise(r => setTimeout(r, 200)); return { items: document.querySelectorAll('.wf-tl-item').length, open: !document.querySelector('.wf-tlp').hidden }; })()`);
     expect('timeline panel opens with events', timeline.open && timeline.items >= 4, timeline);
 
@@ -89,6 +101,16 @@ function intercept(req) {
     await tab.nav(PAGE);
     const after = await tab.ev(`document.querySelector('.wf-sl-count').textContent`);
     expect('language choice survives a reload (chrome.storage.sync)', after === '+2', after);
+
+    // opening a link with a #fragment must land on the section and highlight it in the table of contents
+    await tab.nav(PAGE + '?jump=1#History_3');
+    const jump = await tab.ev(`(async () => {
+      await new Promise(r => setTimeout(r, 1500));
+      const h = document.getElementById('History_3');
+      const active = document.querySelector('.wf-toc li.active > a');
+      return { top: Math.round(h.getBoundingClientRect().top), scrolled: Math.round(scrollY), active: active && active.textContent, heading: h.textContent.replace(/\\[.*$/, '').trim() };
+    })()`);
+    expect('a #fragment link scrolls to the section and the contents highlight it', jump.scrolled > 0 && jump.top >= 0 && jump.top <= 110 && jump.active === jump.heading, jump);
 
     expect('no console errors or exceptions in the page', browser.problems.length === 0, browser.problems);
     tab.close();

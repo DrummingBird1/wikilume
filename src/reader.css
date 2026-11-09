@@ -322,6 +322,14 @@ html[data-wf-cover="off"] .wf-cover { display: none; }
 .wf-article .thumbinner { background: var(--wf-surface) !important; border: 1px solid var(--wf-border) !important; border-radius: 12px; padding: 6px !important; max-width: 100%; }
 .wf-article .thumbimage { border: 0 !important; border-radius: 8px; }
 .wf-article .thumbcaption { font-size: .82em; line-height: 1.5; color: var(--wf-muted); }
+/* current MediaWiki thumbnails are <figure typeof="mw:File/Thumb"> with a <figcaption>, not .thumb/.thumbinner */
+.wf-article figure[typeof~="mw:File/Thumb"], .wf-article figure[typeof~="mw:File/Frame"] {
+  background: var(--wf-surface) !important; border: 1px solid var(--wf-border) !important; border-radius: 12px; padding: 6px !important; max-width: 100%;
+}
+.wf-article figure[typeof~="mw:File/Thumb"] img, .wf-article figure[typeof~="mw:File/Frame"] img { border: 0 !important; border-radius: 8px; }
+.wf-article figure[typeof~="mw:File/Thumb"] figcaption, .wf-article figure[typeof~="mw:File/Frame"] figcaption {
+  font-size: .82em; line-height: 1.5; color: var(--wf-muted) !important; background: transparent !important;
+}
 .wf-article .infobox, .wf-article .wikitable, .wf-article .navbox { font-family: var(--wf-ui-font); line-height: 1.45; }
 .wf-article table.wikitable { display: block; width: max-content; max-width: 100%; overflow-x: auto; font-size: .86em; border-radius: 4px; }
 /* class-less layout tables (tournament brackets, nowrap grids) must scroll inside the column, not widen the page */

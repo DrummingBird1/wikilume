@@ -20,9 +20,12 @@
       .replace(/\s+/g, ' ')
       .trim();
 
+  // Japanese/Chinese sentences end in 。！？ with no space after them; elsewhere a sentence ends at .!?… plus a space and a capital,
+  // except after a single capital letter (an initial such as "D.G. Champernowne" or "J. Einstein").
+  const SENTENCE_BREAK = /(?<=[。！？])(?=\S)|(?<=[.!?…])(?<!(?:^|[\s.("“‘])\p{Lu}\.)\s+(?=[\p{Lu}\p{Lo}"“„(\d])/u;
+
   function splitSentences(text) {
-    const parts = text.split(/(?<=[.!?。…])\s+(?=[\p{Lu}\p{Lo}"“„(\d])/u);
-    return parts.map((p) => p.trim()).filter(Boolean);
+    return text.split(SENTENCE_BREAK).map((p) => p.trim()).filter(Boolean);
   }
 
   /** First plausible year in a sentence: { year, index, prep, quant } or null. */
@@ -112,6 +115,24 @@
     return blocks;
   }
 
+  /** Reading time in whole minutes. Japanese and Chinese have no spaces, so Han/kana characters are counted
+      at ~500 per minute instead of treating a whole paragraph as one "word". Other text: words per minute by language. */
+  function readingMinutes(texts, lang) {
+    const CJK = /[　-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/g; // CJK punctuation, kana, Han, full-width forms
+    let words = 0;
+    let cjk = 0;
+    for (const raw of texts) {
+      const s = String(raw || '').trim();
+      if (!s) continue;
+      const han = s.match(CJK);
+      if (han) cjk += han.length;
+      const rest = han ? s.replace(CJK, ' ').trim() : s;
+      if (rest) words += rest.split(/\s+/).length;
+    }
+    const wpm = /^(he|iw|ar)/.test(String(lang || '')) ? 170 : 220;
+    return Math.max(1, Math.round(words / wpm + cjk / 500));
+  }
+
   global.WF = global.WF || {};
-  global.WF.timeline = { extractEvents, splitSentences, findYear, collectBlocks, clean };
+  global.WF.timeline = { extractEvents, splitSentences, findYear, collectBlocks, clean, readingMinutes };
 })(typeof globalThis !== 'undefined' ? globalThis : window);
