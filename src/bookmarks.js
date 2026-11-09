@@ -1,4 +1,4 @@
-/* WikiFree – bookmarks (saved articles).
+/* WikiLume – bookmarks (saved articles).
    Storage: one chrome.storage.local key per bookmark ("bm:<host>|<Title>"), so saving from two tabs at once never
    overwrites each other and there is no size cap beyond the browser's local quota (10 MB, tens of thousands of entries).
    Falls back to localStorage / memory when chrome.storage is missing (plain-page testing, unit tests).
@@ -7,7 +7,7 @@
   'use strict';
 
   const PREFIX = 'bm:';
-  const LS_PREFIX = 'wikifree-bm:';
+  const LS_PREFIX = 'wikilume-bm:';
   const HOST_RE = /^[a-z0-9-]{2,30}\.wikipedia\.org$/;
   const THUMB_RE = /^https:\/\/upload\.wikimedia\.org\//;
 
@@ -127,7 +127,7 @@
   const remove = (id) => store.remove(id);
 
   function exportJSON(entries) {
-    return JSON.stringify({ app: 'WikiFree', version: 1, exported: new Date().toISOString(), bookmarks: entries.map(({ host, key, title, desc, thumb, added }) => ({ host, key, title, desc, thumb, added })) }, null, 2);
+    return JSON.stringify({ app: 'WikiLume', version: 1, exported: new Date().toISOString(), bookmarks: entries.map(({ host, key, title, desc, thumb, added }) => ({ host, key, title, desc, thumb, added })) }, null, 2);
   }
 
   /** Merge a previously exported file. Existing bookmarks are kept; the file is untrusted, so every entry is re-validated. */

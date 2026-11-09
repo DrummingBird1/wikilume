@@ -1,4 +1,4 @@
-# WikiFree – קריאה נקייה בוויקיפדיה (תוסף כרום, חינמי לגמרי)
+# WikiLume – קריאה נקייה בוויקיפדיה (תוסף כרום, חינמי לגמרי)
 
 עברית · [English](README.en.md) · למפתחים וסוכנים: [AGENTS.md](AGENTS.md)
 
@@ -26,7 +26,7 @@
 ## התקנה (מצב מפתח)
 1. פתחו `chrome://extensions`
 2. הפעילו **Developer mode** (פינה ימנית עליונה)
-3. לחצו **Load unpacked** ובחרו את התיקייה `wikifree` (זו שבה נמצא `manifest.json`)
+3. לחצו **Load unpacked** ובחרו את התיקייה `wikilume` (זו שבה נמצא `manifest.json`)
 4. היכנסו לכל ערך בוויקיפדיה – התצוגה החדשה תופיע מיד
 
 אחרי שינוי בקבצים: `chrome://extensions` ← כפתור הרענון על כרטיס התוסף, ואז רענון הלשונית.
@@ -57,8 +57,8 @@
 
 ## אריזה והפצה
 `node tools/pack.js` יוצר בתיקייה `dist/` (לא נכנסת לגיט) שני קבצים:
-- `wikifree-<גרסה>-chrome.zip` – לחנות של Chrome. אותה חבילה אמורה לעבוד גם ב-Edge ובדפדפני Chromium אחרים (לא נבדק)
-- `wikifree-<גרסה>-firefox.zip` – אותה חבילה עם `browser_specific_settings`. **לא נבדק ב-Firefox.** מזהה התוסף שם הוא placeholder (`wikifree@wikifree.invalid`), וצריך להחליף אותו במזהה שבשליטתכם לפני הגשה ל-addons.mozilla.org
+- `wikilume-<גרסה>-chrome.zip` – לחנות של Chrome. אותה חבילה אמורה לעבוד גם ב-Edge ובדפדפני Chromium אחרים (לא נבדק)
+- `wikilume-<גרסה>-firefox.zip` – אותה חבילה עם `browser_specific_settings`. **לא נבדק ב-Firefox.** מזהה התוסף שם הוא placeholder (`wikilume@wikilume.invalid`), וצריך להחליף אותו במזהה שבשליטתכם לפני הגשה ל-addons.mozilla.org
 
 פרסום בחנויות דורש חשבון מפתח משלכם ותמונות מסך לכרטיס התוסף, ולכן לא נעשה כאן.
 

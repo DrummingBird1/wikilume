@@ -48,7 +48,7 @@ function prepareExtension(dest, real) {
  * { status, headers, body } – so the tests never send traffic to Wikipedia.
  */
 async function startChrome({ intercept, real } = {}) {
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wikifree-e2e-'));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wikilume-e2e-'));
   const extDir = path.join(tmp, 'ext');
   const profile = path.join(tmp, 'profile');
   prepareExtension(extDir, real);

@@ -36,7 +36,7 @@ const SHOTS = [
       const origin = `http://127.0.0.1:${PORTS[s.wiki]}`;
       await tab.nav(origin + '/wiki/Special:Random?x=0', 500).catch(() => {});
       await tab.nav(origin + '/robots.txt', 800);
-      await tab.ev(`localStorage.setItem('wikifree-settings', JSON.stringify({ theme: ${JSON.stringify(s.theme)}, uiLang: ${JSON.stringify(s.ui)} }))`);
+      await tab.ev(`localStorage.setItem('wikilume-settings', JSON.stringify({ theme: ${JSON.stringify(s.theme)}, uiLang: ${JSON.stringify(s.ui)} }))`);
       await tab.nav(origin + s.path, 7000);
       const state = await tab.ev(`({ on: document.documentElement.classList.contains('wf-on'), root: !!document.getElementById('wf-root'), theme: document.documentElement.dataset.wfTheme })`);
       if (!state.root) { console.error('reader did not start for', s.name, state); continue; }

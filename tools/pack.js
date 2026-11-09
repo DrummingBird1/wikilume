@@ -1,6 +1,6 @@
 // Builds store-ready zips (no dependencies):   node tools/pack.js
-//   dist/wikifree-<version>-chrome.zip   Chrome Web Store, also installable in Edge and other Chromium browsers
-//   dist/wikifree-<version>-firefox.zip  Firefox (adds browser_specific_settings; untested, see README)
+//   dist/wikilume-<version>-chrome.zip   Chrome Web Store, also installable in Edge and other Chromium browsers
+//   dist/wikilume-<version>-firefox.zip  Firefox (adds browser_specific_settings; untested, see README)
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
@@ -98,7 +98,7 @@ function build(variant, manifestObj) {
   const zip = makeZip(entries);
   const outDir = path.join(root, 'dist');
   fs.mkdirSync(outDir, { recursive: true });
-  const file = path.join(outDir, `wikifree-${manifest.version}-${variant}.zip`);
+  const file = path.join(outDir, `wikilume-${manifest.version}-${variant}.zip`);
   fs.writeFileSync(file, zip);
   console.log(`${path.relative(root, file)}  ${entries.length} files, ${(zip.length / 1024).toFixed(1)} KB`);
 }
@@ -111,7 +111,7 @@ build('firefox', {
   ...manifest,
   browser_specific_settings: {
     gecko: {
-      id: 'wikifree@wikifree.invalid',
+      id: 'wikilume@wikilume.invalid',
       strict_min_version: '140.0',
       data_collection_permissions: { required: ['none'] },
     },

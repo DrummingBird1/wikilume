@@ -1,4 +1,4 @@
-/* WikiFree – timeline extraction.
+/* WikiLume – timeline extraction.
    Pulls dated sentences out of an article and ranks them. Heuristic by design (no AI, no network): a sentence becomes an
    event when it contains a plausible year (1000–2099), scored by where the year sits and what precedes it.
    extractEvents() is pure (see test/timeline.test.js); collectBlocks() is the only DOM-aware part. */

@@ -97,7 +97,7 @@
   $('uiLang').addEventListener('change', (e) => save({ uiLang: e.target.value }));
   $('bmFilter').addEventListener('input', () => renderSaved(T()));
   $('bmExport').addEventListener('click', () => {
-    BM.download('wikifree-bookmarks-' + new Date().toISOString().slice(0, 10) + '.json', BM.exportJSON(all));
+    BM.download('wikilume-bookmarks-' + new Date().toISOString().slice(0, 10) + '.json', BM.exportJSON(all));
   });
   BM.onChange(reloadList);
 

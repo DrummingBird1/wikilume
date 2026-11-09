@@ -1,6 +1,6 @@
-# WikiFree – agent guide
+# WikiLume – agent guide
 
-WikiFree is a Manifest V3 browser extension (Chrome first) that replaces Wikipedia's page chrome with a clean reading layout:
+WikiLume is a Manifest V3 browser extension (Chrome first) that replaces Wikipedia's page chrome with a clean reading layout:
 table of contents, infobox column, themes, link previews, bookmarks, multi-language search, timeline, on-device summary,
 cover photo, lightbox. Plain JavaScript, no build step, **no dependencies**. Reply in the language the user writes in
 (the owner mostly writes Hebrew); code, comments and docs stay in English, with the README also available in Hebrew.
@@ -24,7 +24,7 @@ Node 22 or newer. Nothing to install (`npm install` is not needed; `pnpm run` wo
 | `npm run check` | Syntax of every JS file, manifest and popup references, version match, no machine-specific paths |
 | `npm test` | Unit tests only (`test/*.test.js`) |
 | `npm run e2e` | Starts the mock site and runs headless-Chrome checks with the real extension (needs Chrome; set `CHROME_PATH` if it is not found) |
-| `npm run pack` | Builds `dist/wikifree-<version>-chrome.zip` and `-firefox.zip` (`dist/` is git-ignored) |
+| `npm run pack` | Builds `dist/wikilume-<version>-chrome.zip` and `-firefox.zip` (`dist/` is git-ignored) |
 | `npm run icons` | Regenerates `icons/` |
 
 Load it manually: `chrome://extensions` → Developer mode → Load unpacked → this folder (the one with `manifest.json`).

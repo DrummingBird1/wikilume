@@ -1,4 +1,4 @@
-/* WikiFree – article summaries.
+/* WikiLume – article summaries.
    Free path: Chrome's built-in on-device Summarizer API (Gemini Nano). No account, no API key, nothing leaves the computer.
    It only exists in recent desktop Chrome, needs a one-time model download, and (as of writing) summarises English, Spanish
    and Japanese. Everything here degrades gracefully: when it is missing we fall back to the article's own lead sentences.

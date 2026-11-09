@@ -27,7 +27,7 @@ function start(wiki, port) {
         return r.end(read('src/' + name).replace(/location\.hostname/g, `'${wiki}'`));
       }
       const resp = await fetch(new URL('https://' + wiki + q.url), {
-        headers: { 'user-agent': 'WikiFree-dev-proxy/1.0 (local screenshots)', accept: q.headers.accept || '*/*', 'accept-language': q.headers['accept-language'] || 'en' },
+        headers: { 'user-agent': 'WikiLume-dev-proxy/1.0 (local screenshots)', accept: q.headers.accept || '*/*', 'accept-language': q.headers['accept-language'] || 'en' },
         redirect: 'manual',
       });
       const headers = {};

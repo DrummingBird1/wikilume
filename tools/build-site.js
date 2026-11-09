@@ -13,7 +13,7 @@ const write = (rel, text) => {
 const L = {
   en: {
     dir: 'ltr', lang: 'en', pre: '', other: ['he/', 'עברית'], priv: 'privacy.html', home: './',
-    title: 'WikiFree – a clean, free reader for Wikipedia', desc: 'A clean, modern reading layout for Wikipedia. Free, no accounts, no tracking.',
+    title: 'WikiLume – a clean, free reader for Wikipedia', desc: 'A clean, modern reading layout for Wikipedia. Free, no accounts, no tracking.',
     nav: ['Features', 'Privacy'],
     hero: ['Wikipedia, made for reading.', 'A calm, modern layout with contents, themes, previews, bookmarks and multi-language search. Free. No account. No tracking.'],
     cta: ['Add to Chrome', 'See features'],
@@ -33,11 +33,11 @@ const L = {
     privH: 'Private by design',
     priv1: 'No account, no analytics, no ads, no remote code. The only network traffic goes to Wikipedia itself. Settings and bookmarks stay in your browser. The only permission is "storage".',
     priv2: 'Read the privacy policy',
-    foot: 'WikiFree is an independent project. It is not affiliated with or endorsed by the Wikimedia Foundation. Wikipedia is a trademark of the Wikimedia Foundation. Article text is available under CC BY-SA 4.0 and every page links to the source article and its history.',
+    foot: 'WikiLume is an independent project. It is not affiliated with or endorsed by the Wikimedia Foundation. Wikipedia is a trademark of the Wikimedia Foundation. Article text is available under CC BY-SA 4.0 and every page links to the source article and its history.',
   },
   he: {
     dir: 'rtl', lang: 'he', pre: '../', other: ['../', 'English'], priv: 'privacy.html', home: './',
-    title: 'WikiFree – קורא חינמי ונקי לוויקיפדיה', desc: 'תצוגת קריאה נקייה ומודרנית לוויקיפדיה. חינם, בלי חשבון, בלי מעקב.',
+    title: 'WikiLume – קורא חינמי ונקי לוויקיפדיה', desc: 'תצוגת קריאה נקייה ומודרנית לוויקיפדיה. חינם, בלי חשבון, בלי מעקב.',
     nav: ['יכולות', 'פרטיות'],
     hero: ['ויקיפדיה, מותאמת לקריאה.', 'תצוגה רגועה ומודרנית עם תוכן עניינים, ערכות נושא, תצוגה מקדימה, סימניות וחיפוש רב-לשוני. חינם. בלי חשבון. בלי מעקב.'],
     cta: ['הוספה ל-Chrome', 'לכל היכולות'],
@@ -57,39 +57,39 @@ const L = {
     privH: 'פרטיות מעצם התכנון',
     priv1: 'בלי חשבון, בלי אנליטיקה, בלי פרסומות ובלי קוד מרוחק. התעבורה היחידה היא לוויקיפדיה עצמה. ההגדרות והסימניות נשארות בדפדפן. ההרשאה היחידה היא "storage".',
     priv2: 'מדיניות הפרטיות',
-    foot: 'WikiFree הוא פרויקט עצמאי. הוא אינו קשור לקרן ויקימדיה ואינו מאושר על ידה. Wikipedia הוא סימן מסחרי של קרן ויקימדיה. טקסט הערכים זמין ברישיון CC BY-SA 4.0, ובכל עמוד יש קישור לערך המקורי ולהיסטוריית העריכות שלו.',
+    foot: 'WikiLume הוא פרויקט עצמאי. הוא אינו קשור לקרן ויקימדיה ואינו מאושר על ידה. Wikipedia הוא סימן מסחרי של קרן ויקימדיה. טקסט הערכים זמין ברישיון CC BY-SA 4.0, ובכל עמוד יש קישור לערך המקורי ולהיסטוריית העריכות שלו.',
   },
 };
 
 const P = {
   en: {
-    title: 'Privacy policy – WikiFree', h1: 'Privacy policy', upd: 'Last updated: 2026-11-09',
+    title: 'Privacy policy – WikiLume', h1: 'Privacy policy', upd: 'Last updated: 2026-11-09',
     sections: [
-      ['Summary', '<p>WikiFree does not collect, store on a server, sell or share any personal data. It has no account system, no analytics and no advertising. It talks only to Wikipedia.</p>'],
-      ['What the extension does with your data', '<ul><li><b>Pages you read.</b> WikiFree runs on Wikipedia article pages (<code>*.wikipedia.org</code>) and re-lays out the article that your browser already loaded. The page content is processed locally in your browser and is not sent to us or to anyone else.</li><li><b>Settings.</b> Your choices (theme, font, text size, width, interface language, extra search languages) are stored with <code>chrome.storage.sync</code>, so Chrome may sync them between your own devices through your Google account. We never receive them.</li><li><b>Bookmarks.</b> Saved articles are stored with <code>chrome.storage.local</code> on your device only. Export creates a file on your computer; import reads a file you choose.</li></ul>'],
-      ['Network requests', '<p>The only requests made are to Wikipedia\'s own servers (<code>*.wikipedia.org</code>): search suggestions, link previews, article metadata and the images the page already uses. These requests go straight from your browser to Wikipedia, which receives them as it would from any reader and handles them under the <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">Wikimedia Foundation privacy policy</a>. WikiFree contacts no other server.</p>'],
+      ['Summary', '<p>WikiLume does not collect, store on a server, sell or share any personal data. It has no account system, no analytics and no advertising. It talks only to Wikipedia.</p>'],
+      ['What the extension does with your data', '<ul><li><b>Pages you read.</b> WikiLume runs on Wikipedia article pages (<code>*.wikipedia.org</code>) and re-lays out the article that your browser already loaded. The page content is processed locally in your browser and is not sent to us or to anyone else.</li><li><b>Settings.</b> Your choices (theme, font, text size, width, interface language, extra search languages) are stored with <code>chrome.storage.sync</code>, so Chrome may sync them between your own devices through your Google account. We never receive them.</li><li><b>Bookmarks.</b> Saved articles are stored with <code>chrome.storage.local</code> on your device only. Export creates a file on your computer; import reads a file you choose.</li></ul>'],
+      ['Network requests', '<p>The only requests made are to Wikipedia\'s own servers (<code>*.wikipedia.org</code>): search suggestions, link previews, article metadata and the images the page already uses. These requests go straight from your browser to Wikipedia, which receives them as it would from any reader and handles them under the <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">Wikimedia Foundation privacy policy</a>. WikiLume contacts no other server.</p>'],
       ['On-device summary', '<p>The summary feature uses the AI built into Chrome (the Summarizer API), which runs on your device. The article text is not sent to us. Chrome downloads its model once, only after you click to agree, and Chrome\'s own terms and privacy notice apply to that model.</p>'],
       ['Permissions', '<ul><li><code>storage</code>: to keep your settings and bookmarks.</li><li>Content script on <code>*://*.wikipedia.org/*</code>: to re-lay out Wikipedia articles. The extension requests no other site access.</li></ul>'],
       ['What we do not do', '<ul><li>No analytics, telemetry, crash reporting, advertising or tracking of any kind.</li><li>No remote code: everything that runs is inside the extension package.</li><li>No selling or transferring of user data to third parties.</li></ul>'],
       ['Children', '<p>The extension collects no data from anyone, including children.</p>'],
       ['Changes', '<p>If this policy changes, the new version will be published at this address with a new date.</p>'],
       ['Contact', '<p>Questions: <a href="[[CONTACT_URL]]">[[CONTACT_URL]]</a></p>'],
-      ['Not affiliated', '<p class="note">WikiFree is an independent project. It is not affiliated with or endorsed by the Wikimedia Foundation. Wikipedia is a trademark of the Wikimedia Foundation. Article text is available under CC BY-SA 4.0.</p>'],
+      ['Not affiliated', '<p class="note">WikiLume is an independent project. It is not affiliated with or endorsed by the Wikimedia Foundation. Wikipedia is a trademark of the Wikimedia Foundation. Article text is available under CC BY-SA 4.0.</p>'],
     ],
   },
   he: {
-    title: 'מדיניות פרטיות – WikiFree', h1: 'מדיניות פרטיות', upd: 'עודכן לאחרונה: 2026-11-09',
+    title: 'מדיניות פרטיות – WikiLume', h1: 'מדיניות פרטיות', upd: 'עודכן לאחרונה: 2026-11-09',
     sections: [
-      ['בקצרה', '<p>WikiFree לא אוסף, לא שומר בשרת, לא מוכר ולא משתף שום מידע אישי. אין בו מערכת חשבונות, אין אנליטיקה ואין פרסומות. הוא מדבר רק עם ויקיפדיה.</p>'],
+      ['בקצרה', '<p>WikiLume לא אוסף, לא שומר בשרת, לא מוכר ולא משתף שום מידע אישי. אין בו מערכת חשבונות, אין אנליטיקה ואין פרסומות. הוא מדבר רק עם ויקיפדיה.</p>'],
       ['מה התוסף עושה עם המידע שלכם', '<ul><li><b>עמודים שאתם קוראים.</b> התוסף פועל בעמודי ערכים בוויקיפדיה (<code>*.wikipedia.org</code>) ומסדר מחדש את הערך שהדפדפן כבר טען. תוכן העמוד מעובד מקומית בדפדפן ואינו נשלח אלינו או לאף גורם אחר.</li><li><b>הגדרות.</b> הבחירות שלכם (ערכת נושא, גופן, גודל טקסט, רוחב, שפת ממשק, שפות חיפוש נוספות) נשמרות ב-<code>chrome.storage.sync</code>, כך ש-Chrome עשוי לסנכרן אותן בין המכשירים שלכם דרך חשבון Google שלכם. אנחנו אף פעם לא מקבלים אותן.</li><li><b>סימניות.</b> ערכים שמורים נשמרים ב-<code>chrome.storage.local</code> במכשיר שלכם בלבד. ייצוא יוצר קובץ במחשב שלכם; ייבוא קורא קובץ שבחרתם.</li></ul>'],
-      ['בקשות רשת', '<p>הבקשות היחידות נשלחות לשרתים של ויקיפדיה עצמה (<code>*.wikipedia.org</code>): הצעות חיפוש, תצוגה מקדימה של קישורים, מטא-נתונים של הערך והתמונות שהעמוד כבר משתמש בהן. הבקשות יוצאות ישירות מהדפדפן שלכם לוויקיפדיה, שמקבלת אותן כמו מכל קורא אחר ומטפלת בהן לפי <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">מדיניות הפרטיות של קרן ויקימדיה</a>. WikiFree לא פונה לשום שרת אחר.</p>'],
+      ['בקשות רשת', '<p>הבקשות היחידות נשלחות לשרתים של ויקיפדיה עצמה (<code>*.wikipedia.org</code>): הצעות חיפוש, תצוגה מקדימה של קישורים, מטא-נתונים של הערך והתמונות שהעמוד כבר משתמש בהן. הבקשות יוצאות ישירות מהדפדפן שלכם לוויקיפדיה, שמקבלת אותן כמו מכל קורא אחר ומטפלת בהן לפי <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">מדיניות הפרטיות של קרן ויקימדיה</a>. WikiLume לא פונה לשום שרת אחר.</p>'],
       ['סיכום במכשיר', '<p>תכונת הסיכום משתמשת ב-AI המובנה של Chrome (Summarizer API), שרץ במכשיר שלכם. טקסט הערך לא נשלח אלינו. Chrome מוריד את המודל פעם אחת, רק אחרי שלחצתם להסכמה, ועל המודל חלים התנאים והודעת הפרטיות של Chrome.</p>'],
       ['הרשאות', '<ul><li><code>storage</code>: לשמירת ההגדרות והסימניות.</li><li>סקריפט תוכן על <code>*://*.wikipedia.org/*</code>: לסידור מחדש של ערכי ויקיפדיה. התוסף לא מבקש גישה לאף אתר אחר.</li></ul>'],
       ['מה אנחנו לא עושים', '<ul><li>בלי אנליטיקה, טלמטריה, דיווח קריסות, פרסום או מעקב מכל סוג.</li><li>בלי קוד מרוחק: כל מה שרץ נמצא בתוך חבילת התוסף.</li><li>בלי מכירה או העברה של מידע משתמשים לצדדים שלישיים.</li></ul>'],
       ['ילדים', '<p>התוסף לא אוסף מידע משום אדם, כולל ילדים.</p>'],
       ['שינויים', '<p>אם המדיניות תשתנה, הגרסה החדשה תפורסם בכתובת הזו עם תאריך חדש.</p>'],
       ['יצירת קשר', '<p>שאלות: <a href="[[CONTACT_URL]]">[[CONTACT_URL]]</a></p>'],
-      ['אין קשר רשמי', '<p class="note">WikiFree הוא פרויקט עצמאי. הוא אינו קשור לקרן ויקימדיה ואינו מאושר על ידה. Wikipedia הוא סימן מסחרי של קרן ויקימדיה. טקסט הערכים זמין ברישיון CC BY-SA 4.0.</p>'],
+      ['אין קשר רשמי', '<p class="note">WikiLume הוא פרויקט עצמאי. הוא אינו קשור לקרן ויקימדיה ואינו מאושר על ידה. Wikipedia הוא סימן מסחרי של קרן ויקימדיה. טקסט הערכים זמין ברישיון CC BY-SA 4.0.</p>'],
     ],
   },
 };
@@ -107,7 +107,7 @@ const head = (t, title, desc) => `<!doctype html>
 <link rel="stylesheet" href="${t.pre}style.css">
 </head>
 <body>
-<div class="wrap"><header class="top"><a class="brand" href="${t.home}"><img src="${t.pre}img/icon.png" alt="">WikiFree</a>
+<div class="wrap"><header class="top"><a class="brand" href="${t.home}"><img src="${t.pre}img/icon.png" alt="">WikiLume</a>
 <nav><a href="${t.home}#features">${t.nav[0]}</a><a href="${t.priv}">${t.nav[1]}</a><a href="${t.other[0]}" hreflang="${t.lang === 'en' ? 'he' : 'en'}">${t.other[1]}</a></nav></header></div>
 `;
 const foot = (t) => `<footer><div class="wrap">${t.foot}</div></footer>

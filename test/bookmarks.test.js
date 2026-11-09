@@ -66,7 +66,7 @@ test('export then import round-trips and merges without overwriting', async () =
   await BM.add(sample({ key: 'One', added: 10 }));
   await BM.add(sample({ key: 'Two', host: 'he.wikipedia.org', title: 'שניים', added: 20 }));
   const dump = BM.exportJSON(await BM.list());
-  assert.equal(JSON.parse(dump).app, 'WikiFree');
+  assert.equal(JSON.parse(dump).app, 'WikiLume');
 
   clear();
   await BM.add(sample({ key: 'One', title: 'Local title wins', added: 5 }));

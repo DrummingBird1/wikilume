@@ -3,9 +3,9 @@
 Paste these into the Developer Dashboard → Store listing. Limits are the store's.
 
 ## Name (max 75; comes from `manifest.json`)
-WikiFree – Clean Wikipedia Reader
+WikiLume – Clean Wikipedia Reader
 
-> Read `NAME-CHECK.md` before submitting: the name is not cleared.
+> Name chosen: WikiLume (2026-11-09). Before submitting, search the Web Store and trademark registries by hand (see `NAME-CHECK.md`).
 
 ## Short description (max 132; comes from `manifest.json` `description`)
 A clean, modern reading experience for Wikipedia. Free, no accounts, no subscriptions. קריאה נקייה ומודרנית בוויקיפדיה – הכול בחינם.
@@ -15,7 +15,7 @@ Productivity (alternative: Accessibility). Language: English, Hebrew.
 
 ## Detailed description (plain text, max 16,000)
 
-WikiFree turns Wikipedia into a calm, modern reading experience. Everything is free: no account, no subscription, no ads, no tracking.
+WikiLume turns Wikipedia into a calm, modern reading experience. Everything is free: no account, no subscription, no ads, no tracking.
 
 WHAT YOU GET
 • A clean layout: large title, short description, reading time and last-edited date
@@ -39,11 +39,11 @@ PRIVATE BY DESIGN
 • The only permission requested is "storage"
 
 HOW IT WORKS
-WikiFree keeps Wikipedia's own article content (so templates, tables and formulas keep working) and replaces the page chrome around it. Turn it off at any time from the toolbar popup, or press "original view" to see the normal page.
+WikiLume keeps Wikipedia's own article content (so templates, tables and formulas keep working) and replaces the page chrome around it. Turn it off at any time from the toolbar popup, or press "original view" to see the normal page.
 
 Wikipedia articles are available under CC BY-SA 4.0, and every page keeps a link to the source article and its history.
 
-WikiFree is an independent project. It is not affiliated with or endorsed by the Wikimedia Foundation. Wikipedia is a trademark of the Wikimedia Foundation.
+WikiLume is an independent project. It is not affiliated with or endorsed by the Wikimedia Foundation. Wikipedia is a trademark of the Wikimedia Foundation.
 
 ## Single purpose (dashboard → Privacy practices)
 Restyles Wikipedia article pages into a clean reading layout (table of contents, themes, previews, bookmarks) without changing the article text.

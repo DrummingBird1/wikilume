@@ -11,7 +11,7 @@ const b64 = (f) => fs.readFileSync(path.join(ROOT, f)).toString('base64');
 const icon = 'data:image/png;base64,' + b64('icons/icon128.png');
 const shotA = 'data:image/png;base64,' + b64('store/screenshots/1-reader-light.png');
 const shotB = 'data:image/png;base64,' + b64('store/screenshots/2-dark-theme.png');
-const NAME = 'WikiFree';
+const NAME = 'WikiLume';
 
 const base = `*{box-sizing:border-box;margin:0}body{font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;color:#fff;
 background:linear-gradient(135deg,#4f46e5 0%,#2563eb 45%,#14b8a6 100%);position:relative}

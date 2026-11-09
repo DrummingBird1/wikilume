@@ -1,10 +1,10 @@
-/* WikiFree – shared strings + settings helpers (used by the content script and the popup). */
+/* WikiLume – shared strings + settings helpers (used by the content script and the popup). */
 (function (global) {
   'use strict';
 
   const STRINGS = {
     en: {
-      brand: 'WikiFree',
+      brand: 'WikiLume',
       search: 'Search Wikipedia',
       searchGo: 'Search for “{q}”',
       random: 'Random article',
@@ -30,7 +30,7 @@
       sourceArticle: 'Source article',
       history: 'History & authors',
       backToTop: 'Back to top',
-      backToReader: 'Back to WikiFree',
+      backToReader: 'Back to WikiLume',
       theme: 'Theme',
       themeAuto: 'Auto',
       themeLight: 'Light',
@@ -47,8 +47,8 @@
       previews: 'Link previews on hover',
       uiLanguage: 'Interface language',
       langAuto: 'Auto',
-      disable: 'Turn WikiFree off',
-      enable: 'Enable WikiFree',
+      disable: 'Turn WikiLume off',
+      enable: 'Enable WikiLume',
       enableHint: 'Applies on every Wikipedia article.',
       popupFree: 'Free forever. No account, no subscription.',
       reloadHint: 'Changes apply instantly.',
@@ -61,7 +61,7 @@
       bmExport: 'Export',
       bmImport: 'Import',
       bmImported: '{added} added, {skipped} skipped',
-      bmImportError: 'This is not a valid WikiFree export file.',
+      bmImportError: 'This is not a valid WikiLume export file.',
       tabSaved: 'Bookmarks',
       tabSettings: 'Settings',
       summary: 'Summary',
@@ -84,10 +84,10 @@
       lbPrev: 'Previous image',
       lbNext: 'Next image',
       fileDetails: 'File page',
-      about: 'WikiFree is free and open. Wikipedia content is licensed CC BY-SA 4.0.',
+      about: 'WikiLume is free and open. Wikipedia content is licensed CC BY-SA 4.0.',
     },
     he: {
-      brand: 'WikiFree',
+      brand: 'WikiLume',
       search: 'חיפוש בוויקיפדיה',
       searchGo: 'חיפוש “{q}”',
       random: 'ערך אקראי',
@@ -112,7 +112,7 @@
       sourceArticle: 'הערך המקורי',
       history: 'היסטוריה ויוצרים',
       backToTop: 'חזרה למעלה',
-      backToReader: 'חזרה ל-WikiFree',
+      backToReader: 'חזרה ל-WikiLume',
       theme: 'ערכת נושא',
       themeAuto: 'אוטומטי',
       themeLight: 'בהיר',
@@ -129,8 +129,8 @@
       previews: 'תצוגה מקדימה של קישורים בריחוף',
       uiLanguage: 'שפת הממשק',
       langAuto: 'אוטומטי',
-      disable: 'כיבוי WikiFree',
-      enable: 'הפעלת WikiFree',
+      disable: 'כיבוי WikiLume',
+      enable: 'הפעלת WikiLume',
       enableHint: 'חל על כל ערך בוויקיפדיה.',
       popupFree: 'חינם לתמיד. בלי חשבון ובלי מנוי.',
       reloadHint: 'השינויים חלים מיד.',
@@ -143,7 +143,7 @@
       bmExport: 'ייצוא',
       bmImport: 'ייבוא',
       bmImported: '{added} נוספו, {skipped} דולגו',
-      bmImportError: 'הקובץ אינו ייצוא תקין של WikiFree.',
+      bmImportError: 'הקובץ אינו ייצוא תקין של WikiLume.',
       tabSaved: 'סימניות',
       tabSettings: 'הגדרות',
       summary: 'סיכום',
@@ -166,7 +166,7 @@
       lbPrev: 'התמונה הקודמת',
       lbNext: 'התמונה הבאה',
       fileDetails: 'דף הקובץ',
-      about: 'WikiFree חינמי ופתוח. התוכן של ויקיפדיה ברישיון CC BY-SA 4.0.',
+      about: 'WikiLume חינמי ופתוח. התוכן של ויקיפדיה ברישיון CC BY-SA 4.0.',
     },
   };
 
@@ -217,7 +217,7 @@
       return chrome.storage.sync.get(DEFAULTS).then((s) => Object.assign({}, DEFAULTS, s));
     }
     try {
-      const raw = JSON.parse(localStorage.getItem('wikifree-settings') || '{}');
+      const raw = JSON.parse(localStorage.getItem('wikilume-settings') || '{}');
       return Promise.resolve(Object.assign({}, DEFAULTS, raw));
     } catch (e) {
       return Promise.resolve(Object.assign({}, DEFAULTS));
@@ -227,8 +227,8 @@
   function saveSettings(patch) {
     if (hasChromeStorage) return chrome.storage.sync.set(patch);
     try {
-      const cur = JSON.parse(localStorage.getItem('wikifree-settings') || '{}');
-      localStorage.setItem('wikifree-settings', JSON.stringify(Object.assign(cur, patch)));
+      const cur = JSON.parse(localStorage.getItem('wikilume-settings') || '{}');
+      localStorage.setItem('wikilume-settings', JSON.stringify(Object.assign(cur, patch)));
     } catch (e) {
       /* ignore */
     }

@@ -1,9 +1,9 @@
 # Architecture
 
-How WikiFree works and why it is built this way. Read this before changing `src/content.js`.
+How WikiLume works and why it is built this way. Read this before changing `src/content.js`.
 
 ## Page takeover (the core idea)
-WikiFree does **not** re-fetch or re-render the article. The content script runs at `document_start`, and when the page is a normal
+WikiLume does **not** re-fetch or re-render the article. The content script runs at `document_start`, and when the page is a normal
 article it keeps Wikipedia's rendered DOM and swaps only the surroundings:
 
 1. **URL gate** (`quickGate`): `/wiki/<Title>` or `/w/index.php?title=…` without `action`, `oldid`, `diff`, `printable`, `redirect`,

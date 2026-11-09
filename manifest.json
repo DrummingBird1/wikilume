@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "WikiFree – Clean Wikipedia Reader",
-  "short_name": "WikiFree",
+  "name": "WikiLume – Clean Wikipedia Reader",
+  "short_name": "WikiLume",
   "version": "1.0.0",
   "description": "A clean, modern reading experience for Wikipedia. Free, no accounts, no subscriptions. קריאה נקייה ומודרנית בוויקיפדיה – הכול בחינם.",
   "icons": {
@@ -12,7 +12,7 @@
   },
   "permissions": ["storage"],
   "action": {
-    "default_title": "WikiFree",
+    "default_title": "WikiLume",
     "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

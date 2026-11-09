@@ -1,4 +1,4 @@
-/* WikiFree – content script.
+/* WikiLume – content script.
    Takes over a rendered Wikipedia article page: keeps Wikipedia's own article DOM (so every template, table,
    formula and gadget keeps working), but swaps the surrounding skin for a clean reader layout. */
 (function () {
@@ -211,14 +211,14 @@
           try {
             ok = init();
           } catch (e) {
-            console.error('[WikiFree] failed, falling back to the original page', e);
+            console.error('[WikiLume] failed, falling back to the original page', e);
             ok = false;
           }
           if (!ok) release();
         });
       })
       .catch((e) => {
-        console.error('[WikiFree]', e);
+        console.error('[WikiLume]', e);
         release();
       })
       .finally(() => {
@@ -411,7 +411,7 @@
       markInverted(article);
       if (aside) markInverted(aside);
     } catch (e) {
-      console.error('[WikiFree] could not restructure the page, reverting to the original view', e);
+      console.error('[WikiLume] could not restructure the page, reverting to the original view', e);
       try {
         sessionStorage.setItem(BYPASS_KEY, '1');
       } catch (e2) {
@@ -918,7 +918,7 @@
     };
     input.addEventListener('input', render);
     exportBtn.addEventListener('click', () => {
-      BM.download('wikifree-bookmarks-' + new Date().toISOString().slice(0, 10) + '.json', BM.exportJSON(all));
+      BM.download('wikilume-bookmarks-' + new Date().toISOString().slice(0, 10) + '.json', BM.exportJSON(all));
     });
     importBtn.addEventListener('click', () => {
       msg.textContent = '';
@@ -1113,7 +1113,7 @@
       p.body.append(note);
       panels.sumDone = true;
     } catch (e) {
-      console.warn('[WikiFree] summary failed', e);
+      console.warn('[WikiLume] summary failed', e);
       fallback(t('summaryFailed'));
     } finally {
       panels.sumRunning = false;
@@ -1128,7 +1128,7 @@
         tlEvents = TL.extractEvents(getBlocks());
         if (tlEvents.length >= 4 && ui.tlChip) ui.tlChip.hidden = false;
       } catch (e) {
-        console.warn('[WikiFree] timeline failed', e);
+        console.warn('[WikiLume] timeline failed', e);
       }
     };
     (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(go);

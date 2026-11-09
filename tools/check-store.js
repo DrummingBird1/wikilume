@@ -40,8 +40,8 @@ if (manifest.host_permissions && manifest.host_permissions.length) fail('host_pe
 if (manifest.version !== JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).version) fail('manifest and package versions differ');
 
 // the package
-const zip = path.join(root, 'dist', `wikifree-${manifest.version}-chrome.zip`);
-if (!fs.existsSync(zip)) fail(`dist/wikifree-${manifest.version}-chrome.zip is missing: run npm run pack`);
+const zip = path.join(root, 'dist', `wikilume-${manifest.version}-chrome.zip`);
+if (!fs.existsSync(zip)) fail(`dist/wikilume-${manifest.version}-chrome.zip is missing: run npm run pack`);
 else {
   const names = [];
   const buf = fs.readFileSync(zip);

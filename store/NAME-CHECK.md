@@ -1,4 +1,9 @@
-# Name check: "WikiFree" (checked 2026-11-09)
+# Name check (2026-11-09)
+
+## Decision: WikiLume
+The first candidate, "WikiFree", clashed with the live business at wikifree.com, so the owner chose **WikiLume** on 2026-11-09. Checks that day: wikilume.com, .app, .org and .dev returned RDAP "not found" (probably unregistered; confirm at a registrar), no npm package or GitHub user of that name exists, and a web search found nothing under that name. Still to do by hand: search the Chrome Web Store and a trademark registry (USPTO, EUIPO, Israel Patent Office). Everything below is the research on the old name, kept for the method.
+
+## Research on the old name "WikiFree"
 
 This is research, not legal advice. Nobody ran a trademark search in a registry (USPTO, EUIPO, Israel Patent Office); do that before relying on the name.
 

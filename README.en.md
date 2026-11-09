@@ -1,8 +1,8 @@
-# WikiFree – a clean Wikipedia reader (browser extension, completely free)
+# WikiLume – a clean Wikipedia reader (browser extension, completely free)
 
 [עברית](README.md) · English
 
-Inspired by Wikiwand: WikiFree replaces Wikipedia's page chrome with a modern reading layout. **Everything is free: no account, no
+Inspired by Wikiwand: WikiLume replaces Wikipedia's page chrome with a modern reading layout. **Everything is free: no account, no
 subscription, no analytics, no third-party servers.** It talks only to Wikipedia's own APIs.
 
 ## Features
@@ -31,7 +31,7 @@ Node 22+, no dependencies.
 ```bash
 npm run verify   # static checks + unit tests
 npm run e2e      # headless Chrome with the real extension against a mock site (needs Chrome; set CHROME_PATH if not found)
-npm run pack     # dist/wikifree-<version>-chrome.zip and -firefox.zip
+npm run pack     # dist/wikilume-<version>-chrome.zip and -firefox.zip
 ```
 
 Contributing humans and AI agents: start with [AGENTS.md](AGENTS.md), then [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and
