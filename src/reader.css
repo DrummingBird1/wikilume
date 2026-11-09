@@ -324,6 +324,10 @@ html[data-wf-cover="off"] .wf-cover { display: none; }
 .wf-article .thumbcaption { font-size: .82em; line-height: 1.5; color: var(--wf-muted); }
 .wf-article .infobox, .wf-article .wikitable, .wf-article .navbox { font-family: var(--wf-ui-font); line-height: 1.45; }
 .wf-article table.wikitable { display: block; width: max-content; max-width: 100%; overflow-x: auto; font-size: .86em; border-radius: 4px; }
+/* class-less layout tables (tournament brackets, nowrap grids) must scroll inside the column, not widen the page */
+.wf-article table:not(.infobox, .wikitable, .ambox, .metadata, .sidebar, .mbox-small):not(:is(table, .navbox, .infobox, .sidebar, .metadata, .ambox) table) {
+  display: block; max-width: 100%; overflow-x: auto;
+}
 .wf-article .navbox, .wf-article .navbox-styles + .navbox { font-size: .82em; margin-top: 2.4em; clear: both; }
 .wf-article .reflist, .wf-article ol.references { font-size: .84em; line-height: 1.55; color: var(--wf-muted); }
 .wf-article ol.references li { margin-bottom: .45em; }

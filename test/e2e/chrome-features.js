@@ -35,15 +35,28 @@ function intercept(req) {
     expect('timeline chip appears when the article has dates', layout.timelineChip);
     expect('summary, bookmark and search-language controls exist', layout.summaryChip && layout.bookmarkChip && layout.searchLangButton, layout);
 
+    const wide = await tab.ev(`(() => {
+      const t = document.getElementById('wide-bracket');
+      const art = document.querySelector('.wf-article').getBoundingClientRect();
+      return { tableRight: Math.round(t.getBoundingClientRect().right), articleRight: Math.round(art.right), docW: document.documentElement.scrollWidth, vw: innerWidth, scrolls: t.scrollWidth > t.clientWidth };
+    })()`);
+    expect('a wide class-less table scrolls inside the column and does not widen the page', wide.tableRight <= wide.articleRight + 1 && wide.docW <= wide.vw + 1 && wide.scrolls, wide);
+
     const timeline = await tab.ev(`(async () => { document.querySelector('.wf-tl-chip').click(); await new Promise(r => setTimeout(r, 200)); return { items: document.querySelectorAll('.wf-tl-item').length, open: !document.querySelector('.wf-tlp').hidden }; })()`);
     expect('timeline panel opens with events', timeline.open && timeline.items >= 4, timeline);
 
     // whatever state this Chrome is in, the summary must end in a sane panel and never start a download by itself
     const summary = await tab.ev(`(async () => {
       document.querySelector('.wf-sum-chip').click();
-      await new Promise(r => setTimeout(r, 1500));
       const p = document.querySelector('.wf-sum');
-      return { consent: !!p.querySelector('button.wf-chip'), lead: !!p.querySelector('.wf-lead'), items: p.querySelectorAll('.wf-sum-out li').length, text: p.querySelector('.wf-panel-body').textContent.length };
+      const read = () => ({ consent: !!p.querySelector('button.wf-chip'), lead: !!p.querySelector('.wf-lead'), items: p.querySelectorAll('.wf-sum-out li').length, text: p.querySelector('.wf-panel-body').textContent.length });
+      // Summarizer.availability() can take several seconds on a cold profile: wait for a settled state, up to 10 s
+      let s = read();
+      for (let i = 0; i < 50 && !(s.consent || s.lead || s.items > 0); i++) {
+        await new Promise(r => setTimeout(r, 200));
+        s = read();
+      }
+      return s;
     })()`);
     expect('summary shows consent, a fallback lead, or a result', summary.consent || summary.lead || summary.items > 0, summary);
 
