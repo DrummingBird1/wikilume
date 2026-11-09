@@ -39,4 +39,4 @@ Contributing humans and AI agents: start with [AGENTS.md](AGENTS.md), then [docs
 
 ## Status
 Tested on a hand-written mock Wikipedia and in a real Chrome profile; **not yet verified on real Wikipedia articles**. Firefox and
-Edge are untested. No license has been chosen yet; Wikipedia's text is CC BY-SA 4.0.
+Edge are untested. The code is MIT licensed (see `LICENSE`); Wikipedia's text is CC BY-SA 4.0.

@@ -1,6 +1,7 @@
 {
   "name": "wikilume",
   "version": "1.0.0",
+  "license": "MIT",
   "private": true,
   "description": "Clean, modern reading experience for Wikipedia (browser extension). Free, no accounts, no subscriptions.",
   "engines": {
