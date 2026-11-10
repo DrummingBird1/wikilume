@@ -18,7 +18,7 @@ Everything the store asks for is in this folder. What is left needs the owner (a
 1. **Name**: WikiLume was chosen (the old name WikiFree clashed with wikifree.com; see `NAME-CHECK.md`). Search the Web Store and a trademark registry by hand before submitting.
 2. **Developer account**: the owner already has one. Open https://chrome.google.com/webstore/devconsole.
 3. **Site is published** (GitHub Pages, deployed from `main` by `.github/workflows/pages.yml` when `site/` changes): https://drummingbird1.github.io/wikilume/ . Privacy policy URL for the dashboard: https://drummingbird1.github.io/wikilume/privacy.html . Repository: https://github.com/DrummingBird1/wikilume .
-4. **Fill the store placeholder** in `site/`: the contact link already points to the repository issue tracker. The listing address is known only after the first submission: submit, replace the `STORE_URL` placeholder in `tools/build-site.js` (in double square brackets), and run `npm run site`, then republish.
+4. **Store URL**: done. The site's install button points at the live listing (`STORE_URL` was replaced in `tools/build-site.js`). If the listing address ever changes, edit it there, run `npm run site` and push to `main`.
 5. **License**: MIT, see `LICENSE` (done).
 6. **Test by hand in a normal Chrome**: load unpacked, open real articles. See the checklist in `docs/BACKLOG.md` (automated runs need Chrome for Testing because branded Chrome ignores `--load-extension`; a hand check in the owner's own Chrome is still worth doing).
 7. **Run the gate**: `npm run verify && npm run e2e && npm run pack && npm run check-store`. `check-store` fails until the placeholders are replaced.

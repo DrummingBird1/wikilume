@@ -128,7 +128,7 @@ for (const k of ['en', 'he']) {
   const p = P[k];
   const dir = k === 'en' ? 'site/' : 'site/he/';
   write(dir + 'index.html', head(t, t.title, t.desc) + `<section class="hero"><div class="wrap"><h1>${t.hero[0]}</h1><p>${t.hero[1]}</p>
-<a class="btn" href="[[STORE_URL]]">${t.cta[0]}</a><a class="btn ghost" href="#features">${t.cta[1]}</a></div></section>
+<a class="btn" href="https://chromewebstore.google.com/detail/wikilume-%E2%80%93-clean-wikipedi/ijfhflgjhfnjfcjhcbfhgedpmgkikdlj">${t.cta[0]}</a><a class="btn ghost" href="#features">${t.cta[1]}</a></div></section>
 <div class="wrap">
 <img class="shot" src="${t.pre}img/${k === 'he' ? '3-hebrew-rtl' : '1-reader-light'}.png" width="1280" height="800" alt="${t.title}">
 <h2 id="features">${t.featH}</h2>
