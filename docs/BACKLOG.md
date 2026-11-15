@@ -40,7 +40,7 @@ Open work, known risks and decisions waiting for the owner. Update this file whe
 - [ ] Manual check in a real Chrome: Alt+Shift+W (and rebinding), history across restarts, Wikidata dates on a person, a company and an event article, Hebrew/RTL for the help card and the continue chip.
 - [ ] Store review: new `commands` + service worker; privacy policy and listing text were updated (re-publish the site with the release).
 - [ ] The new history e2e check (`chrome-bookmarks.js`) is flaky like the other storage checks: the mock page runs a page-world copy of the scripts next to the extension's.
-- [ ] Store listings now exist in 8 languages (en, he, es, fr, de, pt-BR, ru, ja). Machine-written translations: have a native speaker skim them, then add each language in the dashboard (Store listing → add language) and paste `store/listing.<code>.md`.
+- [ ] Store listings now exist in 8 languages (en, he, es, fr, de, pt-BR, ru, ja). Add each language in the dashboard (Store listing → add language) and paste `store/listing.<code>.md`.
 
 ## Decided
 - **License:** MIT (`LICENSE`), holder DrummingBird1. Wikipedia text stays CC BY-SA 4.0.
