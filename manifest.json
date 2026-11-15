@@ -11,6 +11,15 @@
     "128": "icons/icon128.png"
   },
   "permissions": ["storage"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "commands": {
+    "toggle-reader": {
+      "suggested_key": { "default": "Alt+Shift+W" },
+      "description": "Toggle the WikiLume reader on this page"
+    }
+  },
   "action": {
     "default_title": "WikiLume",
     "default_popup": "popup/popup.html",

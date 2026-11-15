@@ -109,6 +109,8 @@ build('chrome', manifest);
 // The id is permanent once the first version is uploaded to addons.mozilla.org.
 build('firefox', {
   ...manifest,
+  // Firefox MV3 runs background code as an event page (scripts), not as a service worker
+  background: { scripts: [manifest.background.service_worker] },
   browser_specific_settings: {
     gecko: {
       id: 'wikilume@drummingbird1.github.io',

@@ -478,3 +478,15 @@ html.wf-bypass .wf-pill {
   cursor: pointer; box-shadow: 0 8px 24px rgba(79, 70, 229, .45);
 }
 html.wf-bypass .wf-pill:hover { background: #4338ca; }
+
+/* ---------- keyboard shortcuts help ---------- */
+.wf-help {
+  position: fixed; inset-block-start: 50%; inset-inline-start: 50%; transform: translate(-50%, -50%); z-index: 300;
+  width: 340px; max-width: calc(100vw - 32px); padding: 18px 20px; background: var(--wf-bg); color: var(--wf-text);
+  border: 1px solid var(--wf-border); border-radius: 18px; box-shadow: var(--wf-shadow); font-family: var(--wf-ui-font); font-size: 14px;
+}
+html[dir="rtl"] .wf-help { transform: translate(50%, -50%); }
+.wf-help h2 { margin: 0 0 12px; font-size: 16px; }
+.wf-help-list { display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; margin: 0 0 14px; align-items: center; }
+.wf-help-list dt, .wf-help-list dd { margin: 0; }
+.wf-help kbd { display: inline-block; min-width: 24px; padding: 2px 7px; text-align: center; font: 600 12.5px var(--wf-ui-font); background: var(--wf-surface); border: 1px solid var(--wf-border); border-radius: 6px; }

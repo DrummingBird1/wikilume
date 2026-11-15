@@ -72,6 +72,20 @@ function intercept(req) {
     })()`);
     expect('summary shows consent, a fallback lead, or a result', summary.consent || summary.lead || summary.items > 0, summary);
 
+    const keys = await tab.ev(`(async () => {
+      const press = (key) => document.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+      const wait = () => new Promise(r => setTimeout(r, 150));
+      const before = document.documentElement.dataset.wfTheme;
+      press('t'); await wait();
+      const after = document.documentElement.dataset.wfTheme;
+      press('?'); await wait();
+      const help = document.querySelector('.wf-help');
+      const helpOpen = !!help && !help.hidden;
+      press('Escape'); await wait();
+      return { before, after, helpOpen, helpClosed: help.hidden };
+    })()`);
+    expect('"t" cycles the theme and "?" opens and Escape closes the shortcuts help', keys.before !== keys.after && keys.helpOpen && keys.helpClosed, keys);
+
     const lightbox = await tab.ev(`(async () => {
       document.querySelector('.wf-cover img').click();
       await new Promise(r => setTimeout(r, 300));

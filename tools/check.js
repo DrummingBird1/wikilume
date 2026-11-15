@@ -46,6 +46,7 @@ if (manifest) {
   Object.values(manifest.icons || {}).forEach((f) => refs.add(f));
   Object.values((manifest.action || {}).default_icon || {}).forEach((f) => refs.add(f));
   if ((manifest.action || {}).default_popup) refs.add(manifest.action.default_popup);
+  if ((manifest.background || {}).service_worker) refs.add(manifest.background.service_worker);
   for (const f of refs) if (!exists(f)) fail(`manifest references a missing file: ${f}`);
 
   const popup = (manifest.action || {}).default_popup;

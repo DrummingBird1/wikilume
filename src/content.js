@@ -171,6 +171,25 @@
   function main() {
     if (!quickGate()) return;
 
+    // the browser-level "toggle reader" command (see background.js): flip between the reader and Wikipedia's own view
+    try {
+      chrome.runtime.onMessage.addListener((msg) => {
+        if (!msg || msg.type !== 'wf-toggle') return;
+        if (bypassed()) {
+          try {
+            sessionStorage.removeItem(BYPASS_KEY);
+          } catch (e) {
+            /* ignore */
+          }
+          location.reload();
+        } else {
+          goOriginal();
+        }
+      });
+    } catch (e) {
+      /* no extension runtime (mock page tests) */
+    }
+
     if (bypassed()) {
       html.classList.add('wf-bypass');
       WF.loadSettings().then((s) => {
@@ -1433,7 +1452,8 @@
       }
       const tag = (e.target.tagName || '').toLowerCase();
       const typing = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
-      if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const plain = !typing && !e.ctrlKey && !e.metaKey && !e.altKey;
+      if (e.key === '/' && plain) {
         e.preventDefault();
         ui.search.focus();
         ui.search.select();
@@ -1441,8 +1461,57 @@
         closePops();
         closeDrawer();
         hideCard();
+        closeHelp();
+      } else if (plain && e.key === 'b') {
+        toggleBookmark();
+      } else if (plain && e.key === 't') {
+        cycleTheme();
+      } else if (plain && e.key === 'o') {
+        goOriginal();
+      } else if (plain && e.key === 's') {
+        toggleSummary();
+      } else if (plain && e.key === '?') {
+        toggleHelp();
       }
     });
+  }
+
+  const THEMES = ['auto', 'light', 'sepia', 'dark'];
+  function cycleTheme() {
+    update({ theme: THEMES[(THEMES.indexOf(settings.theme) + 1) % THEMES.length] });
+  }
+
+  /** Reload the page without the reader (a pill then offers the way back). */
+  function goOriginal() {
+    try {
+      sessionStorage.setItem(BYPASS_KEY, '1');
+    } catch (e) {
+      /* ignore */
+    }
+    location.reload();
+  }
+
+  let helpEl = null;
+  function closeHelp() {
+    if (helpEl) helpEl.hidden = true;
+  }
+  function toggleHelp() {
+    if (!helpEl) {
+      const rows = [
+        ['/', 'keySearch'], ['b', 'keyBookmark'], ['t', 'keyTheme'], ['o', 'keyOriginal'], ['s', 'keySummary'], ['?', 'keyHelp'], ['Esc', 'keyClose'],
+      ];
+      const list = h('dl', 'wf-help-list');
+      for (const [k, label] of rows) list.append(h('dt', null, h('kbd', null, k)), h('dd', null, t(label)));
+      const close = h('button', 'wf-chip', t('closeHelp'));
+      close.type = 'button';
+      close.addEventListener('click', closeHelp);
+      helpEl = h('div', 'wf-help', h('h2', null, t('shortcuts')), list, close);
+      helpEl.setAttribute('role', 'dialog');
+      helpEl.setAttribute('aria-label', t('shortcuts'));
+      helpEl.hidden = true;
+      ui.root.append(helpEl);
+    }
+    helpEl.hidden = !helpEl.hidden;
   }
 
   /* ---------------------------------------------------------------- API metadata: description, hero image, languages, last edit */
