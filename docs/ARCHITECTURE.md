@@ -29,6 +29,7 @@ direction for placement and set `dir` on their content.
 |---|---|---|
 | Settings | `chrome.storage.sync`, keys = `WF.DEFAULTS` | live via `onChanged`; `enabled`/`uiLang` reload the page |
 | Bookmarks | `chrome.storage.local`, one key per bookmark `bm:<host>|<Title>` | no read-modify-write races between tabs; imports are re-validated (only `*.wikipedia.org`, only `upload.wikimedia.org` thumbnails) |
+| Reading history | `chrome.storage.local`, one key per article `hist:<host>|<Title>` = `{title, ts, pct}` | newest 200 kept; setting `history` turns it off; entries are re-validated before the popup links to them |
 | Bypass flag | `sessionStorage` | per tab, per wiki origin |
 
 Outside the extension (mock page tests) `i18n.js` and `bookmarks.js` fall back to `localStorage` or memory.
@@ -36,6 +37,7 @@ Outside the extension (mock page tests) `i18n.js` and `bookmarks.js` fall back t
 ## Network
 - Same wiki: `/w/api.php` (description, lead image, last edit, language links), `/w/rest.php/v1/search/title` (search),
   `/api/rest_v1/page/summary/<Title>` (hover cards). All same-origin, so no CORS and no host permissions.
+- Wikidata: `https://www.wikidata.org/w/api.php?action=wbgetentities&origin=*&props=claims` for the item id (`pageprops.wikibase_item`) of the article. Only the id is sent. Anonymous CORS, so still no host permissions. Failures are silent and leave the heuristic timeline unchanged.
 - Other wikis (multi-language search): action API with `origin=*` (anonymous CORS). This is why no `host_permissions` are needed.
 - Nothing else leaves the browser. The summary runs on-device.
 
@@ -55,6 +57,8 @@ Outside the extension (mock page tests) `i18n.js` and `bookmarks.js` fall back t
   Japanese output; everything else (Hebrew included) falls back to the article's lead sentences.
 - **Timeline:** `src/timeline.js` splits prose into sentences, finds the first plausible year (1000–2099), scores it (position,
   preceding preposition, quantity words such as "more than"), caps events per section, and sorts chronologically. Pure functions.
+- **Timeline + Wikidata:** `src/wikidata.js` turns birth/death/founding/start/end/point-in-time claims (1000-2099, year precision or better) into events marked `source: 'wikidata'`; `mergeEvents` puts them in front of text events of the same year. BCE and pre-1000 dates are left out, like in the text heuristic.
+- **Shortcuts:** in-page keys live in `wireKeys()`; the `toggle-reader` command (Alt+Shift+W) goes through `src/background.js`, a stateless service worker that only messages the active tab. Firefox gets it as an event page (`background.scripts`, see `tools/pack.js`).
 - **Cover photo:** shown only when the API's lead image is landscape (width/height ≥ 1.25); portrait lead images stay a small
   picture beside the title (when there is no infobox).
 - **Search languages:** chosen in a popover on the search box (`searchLangs`), merged round-robin after this wiki's results.
