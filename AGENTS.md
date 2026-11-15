@@ -110,6 +110,7 @@ WikiLume 1.0.0 is **published** in the Chrome Web Store (2026-11-10) and the rep
 
 ## Working with several agents
 - `CLAUDE.md`, `GEMINI.md` and `.github/copilot-instructions.md` all point back to this file; keep the real rules only here.
+- Claude Code: personal permission overrides go in `.claude/settings.local.json` (git-ignored). Tell the owner which of `npm run verify` and `npm run e2e` you ran.
 - Check `docs/BACKLOG.md` before starting and update it when you finish or discover something. The flow for human contributors
   is in `CONTRIBUTING.md`.
 - Two agents should not edit the same files at once: use a separate branch or `git worktree` per task.
