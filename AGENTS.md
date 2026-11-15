@@ -5,6 +5,19 @@ table of contents, infobox column, themes, link previews, bookmarks, multi-langu
 cover photo, lightbox. Plain JavaScript, no build step, **no dependencies**. Reply in the language the user writes in
 (the owner mostly writes Hebrew); code, comments and docs stay in English, with the README also available in Hebrew.
 
+<!-- BEGIN core-rules v1 (generated from the shared core-rules.md; do not edit by hand) -->
+## Core rules (apply to every agent)
+
+- Read this file first. If `HANDOFF.local.md` exists next to it, read it too (local only, not in git).
+- Never push, force-push or create remotes unless the owner explicitly asks. Work on a branch named `agent/<tool>-<topic>`; merge to `main` only through a pull request.
+- Never commit or print secrets (`.env`, keys, tokens). Keep personal paths, emails and private repo names out of tracked files.
+- Package managers: JavaScript uses `pnpm`, Python uses `uv`. Do not switch without being asked.
+- Dev servers listen on `127.0.0.1` only, unless the owner asks otherwise.
+- Do not delete or overwrite user data. Move it to an archive folder or ask first, and do a dry run before bulk changes.
+- Make the smallest change that solves the task. Run this project's own check and test commands (see Run and Test in this file) and say what you ran and what you could not verify.
+- If you have no access to the repository (a chat-only agent), return a unified diff or complete files, and list what the owner should verify.
+<!-- END core-rules -->
+
 ## Product rules (do not break these)
 - **Free, no accounts, no telemetry, no third-party servers.** The only network traffic is to Wikipedia/Wikimedia APIs.
   Summaries use Chrome's on-device AI, never a paid API. Do not add analytics, remote code or tracking.
