@@ -1131,7 +1131,8 @@
         console.warn('[WikiLume] timeline failed', e);
       }
     };
-    (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(go);
+    if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(go);
+    else setTimeout(go, 300);
   }
 
   function jumpTo(el) {
