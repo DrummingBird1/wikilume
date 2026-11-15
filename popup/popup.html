@@ -31,6 +31,14 @@
       </div>
     </section>
 
+    <section id="panelHistory" class="panel" role="tabpanel" hidden>
+      <ul class="wf-bmlist" id="histList"></ul>
+      <p class="empty" id="histEmpty"></p>
+      <div class="bm-foot">
+        <button type="button" id="histClear"></button>
+      </div>
+    </section>
+
     <section id="panelSettings" class="panel" role="tabpanel" hidden>
       <label class="row switch">
         <span><b id="enableLabel"></b><small id="enableHint"></small></span>
@@ -47,6 +55,11 @@
         <input type="checkbox" id="previews">
       </label>
 
+      <label class="row switch">
+        <span><b id="histLabel"></b><small id="histHint"></small></span>
+        <input type="checkbox" id="historyOn">
+      </label>
+
       <section class="row">
         <span class="label" id="langLabel"></span>
         <select id="uiLang"></select>
@@ -60,6 +73,7 @@
   </main>
   <script src="../src/i18n.js"></script>
   <script src="../src/bookmarks.js"></script>
+  <script src="../src/history.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

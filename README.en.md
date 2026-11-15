@@ -13,7 +13,9 @@ subscription, no analytics, no third-party servers.** It talks only to Wikipedia
 - **Bookmarks:** save articles, filter, export/import as JSON, shown in the page and in the toolbar popup
 - **Summary:** written on your device by Chrome's built-in AI (asks before the one-time multi-GB model download); falls back to
   the article's opening when unavailable. English, Spanish and Japanese only, so not Hebrew
-- **Timeline:** dated events picked from the article text (heuristic)
+- **Timeline:** dated events picked from the article text (heuristic), plus birth/death/founding dates of the subject from Wikidata
+- **Reading history:** "continue reading" chip and a History tab in the popup; local only, newest 200, can be switched off or cleared
+- **Keyboard shortcuts:** `/` search, `b` bookmark, `t` theme, `o` original view, `s` summary, `?` help; `Alt+Shift+W` (rebind at `chrome://extensions/shortcuts`) switches between the reader and Wikipedia's own view
 - Wide cover photo for landscape lead images, and an image lightbox with captions and keyboard navigation
 - Read-aloud, full RTL support, English or Hebrew interface, "original view" per tab
 

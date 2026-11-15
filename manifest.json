@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "WikiLume – Clean Wikipedia Reader",
+  "name": "__MSG_extName__",
   "short_name": "WikiLume",
-  "version": "1.0.0",
-  "description": "A clean, modern reading experience for Wikipedia. Free, no accounts, no subscriptions. קריאה נקייה ומודרנית בוויקיפדיה – הכול בחינם.",
+  "default_locale": "en",
+  "version": "1.1.0",
+  "description": "__MSG_extDescription__",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -11,6 +12,15 @@
     "128": "icons/icon128.png"
   },
   "permissions": ["storage"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "commands": {
+    "toggle-reader": {
+      "suggested_key": { "default": "Alt+Shift+W" },
+      "description": "Toggle the WikiLume reader on this page"
+    }
+  },
   "action": {
     "default_title": "WikiLume",
     "default_popup": "popup/popup.html",
@@ -23,7 +33,7 @@
     {
       "matches": ["*://*.wikipedia.org/*"],
       "exclude_matches": ["*://*.m.wikipedia.org/*"],
-      "js": ["src/i18n.js", "src/bookmarks.js", "src/timeline.js", "src/summary.js", "src/content.js"],
+      "js": ["src/i18n.js", "src/bookmarks.js", "src/history.js", "src/wikidata.js", "src/timeline.js", "src/summary.js", "src/content.js"],
       "css": ["src/reader.css"],
       "run_at": "document_start"
     }

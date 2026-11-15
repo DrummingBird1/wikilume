@@ -2,16 +2,16 @@
 
 Paste these into the Developer Dashboard → Store listing. Limits are the store's.
 
-## Name (max 75; comes from `manifest.json`)
+## Name (max 75; comes from `_locales/en/messages.json`)
 WikiLume – Clean Wikipedia Reader
 
 > Name chosen: WikiLume (2026-11-09). Before submitting, search the Web Store and trademark registries by hand (see `NAME-CHECK.md`).
 
-## Short description (max 132; comes from `manifest.json` `description`)
-A clean, modern reading experience for Wikipedia. Free, no accounts, no subscriptions. קריאה נקייה ומודרנית בוויקיפדיה – הכול בחינם.
+## Short description (max 132; comes from `_locales/en/messages.json`, must match)
+A clean, modern reading layout for Wikipedia: themes, contents, bookmarks, multi-language search. Free, no accounts.
 
 ## Category
-Productivity (alternative: Accessibility). Language: English, Hebrew.
+Productivity (alternative: Accessibility). Languages: English (default), Hebrew, Spanish, French, German, Portuguese (Brazil), Russian, Japanese. One listing file per language: `listing.<code>.md`; all eight must be updated on every significant change (see `AGENTS.md`).
 
 ## Detailed description (plain text, max 16,000)
 
@@ -27,15 +27,17 @@ WHAT YOU GET
 • Search with suggestions (press / to focus it), a random-article button and a language switcher
 • Multi-language search: tick extra Wikipedias next to the search box and see their results side by side
 • Bookmarks: save articles, filter them, export and import as a file; available in the page and in the toolbar popup
-• Timeline: dated events picked out of the article text
+• Timeline: dated events picked out of the article text, plus birth, death and founding dates from Wikidata
+• Reading history with a "continue reading" button (stored only on your device; you can switch it off)
+• Keyboard shortcuts (press ? in an article) and an Alt+Shift+W command to switch between the reader and Wikipedia's own view
 • Summary: written on your own device by Chrome's built-in AI. It asks first before the one-time model download (several GB), and falls back to the article's opening when the AI is not available. Chrome's on-device model writes English, Spanish and Japanese only, so Hebrew articles show the opening instead
 • A wide cover photo for landscape lead images, and a lightbox with captions and keyboard navigation
 • Read-aloud, full right-to-left support, English or Hebrew interface, and a one-click "original view" for any tab
 
 PRIVATE BY DESIGN
 • No account, no analytics, no ads, no remote code
-• The only network traffic is to Wikipedia's own servers, the same ones the page already uses
-• Your settings and bookmarks stay in your browser
+• The only network traffic is to Wikimedia's own servers (Wikipedia and Wikidata), the same ones the page already uses
+• Your settings, bookmarks and reading history stay in your browser
 • The only permission requested is "storage"
 
 HOW IT WORKS
@@ -49,8 +51,8 @@ WikiLume is an independent project. It is not affiliated with or endorsed by the
 Restyles Wikipedia article pages into a clean reading layout (table of contents, themes, previews, bookmarks) without changing the article text.
 
 ## Permission justification
-- `storage`: saves your reading settings (theme, font, language) and your bookmarks in the browser. Nothing is sent anywhere.
-- Content script on `*://*.wikipedia.org/*`: this is the single purpose – it reads the Wikipedia article already on the page and re-lays it out. No other sites.
+- `storage`: saves your reading settings (theme, font, language), your bookmarks and your reading history in the browser. Nothing is sent anywhere.
+- Content script on `*://*.wikipedia.org/*`: this is the single purpose – it reads the Wikipedia article already on the page and re-lays it out. No other sites. Dates of the article's subject are read from `www.wikidata.org` with an anonymous cross-origin request (no host permission needed).
 - No remote code, no host permissions beyond that match pattern.
 
 ## Data usage disclosures (dashboard → Privacy practices)

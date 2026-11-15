@@ -7,7 +7,7 @@ const zlib = require('zlib');
 
 const root = path.join(__dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.json'), 'utf8'));
-const DIRS = ['icons', 'popup', 'src'];
+const DIRS = ['icons', 'popup', 'src', '_locales'];
 
 const crcTable = (() => {
   const t = new Uint32Array(256);
@@ -106,12 +106,14 @@ function build(variant, manifestObj) {
 build('chrome', manifest);
 
 // Firefox needs an add-on id (also required for storage.sync) and, on recent versions, a data-collection declaration.
-// The id below is a placeholder: use one you control before submitting to addons.mozilla.org.
+// The id is permanent once the first version is uploaded to addons.mozilla.org.
 build('firefox', {
   ...manifest,
+  // Firefox MV3 runs background code as an event page (scripts), not as a service worker
+  background: { scripts: [manifest.background.service_worker] },
   browser_specific_settings: {
     gecko: {
-      id: 'wikilume@wikilume.invalid',
+      id: 'wikilume@drummingbird1.github.io',
       strict_min_version: '140.0',
       data_collection_permissions: { required: ['none'] },
     },

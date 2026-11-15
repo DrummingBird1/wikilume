@@ -35,6 +35,13 @@ Open work, known risks and decisions waiting for the owner. Update this file whe
 - [ ] Trademark registry search for "WikiLume" (USPTO, EUIPO, Israel Patent Office); see `store/NAME-CHECK.md`.
 - [ ] Flaky e2e checks under Chrome for Testing (summary, `storage.sync` language persistence, second-tab bookmark).
 
+## 1.1.0 (in progress)
+- Done: keyboard shortcuts + `toggle-reader` command, reading history, Wikidata dates in the timeline, permanent Firefox add-on id.
+- [ ] Manual check in a real Chrome: Alt+Shift+W (and rebinding), history across restarts, Wikidata dates on a person, a company and an event article, Hebrew/RTL for the help card and the continue chip.
+- [ ] Store review: new `commands` + service worker; privacy policy and listing text were updated (re-publish the site with the release).
+- [ ] The new history e2e check (`chrome-bookmarks.js`) is flaky like the other storage checks: the mock page runs a page-world copy of the scripts next to the extension's.
+- [ ] Store listings now exist in 8 languages (en, he, es, fr, de, pt-BR, ru, ja). Add each language in the dashboard (Store listing → add language) and paste `store/listing.<code>.md`.
+
 ## Decided
 - **License:** MIT (`LICENSE`), holder DrummingBird1. Wikipedia text stays CC BY-SA 4.0.
 - **Hosting:** public repository https://github.com/DrummingBird1/wikilume, site on GitHub Pages.
@@ -49,7 +56,5 @@ Open work, known risks and decisions waiting for the owner. Update this file whe
 
 ## Ideas
 - "Ask about this article" and suggested questions via Chrome's Prompt API (same language limits) or an optional user-supplied API key.
-- Timeline from Wikidata dates instead of text heuristics.
-- Reading history / "continue reading", reading lists with folders.
-- Keyboard shortcuts for bookmark and theme; a command to toggle the reader.
+- Reading lists with folders; wider Wikidata use (BCE dates, more properties) if the first version proves useful.
 - More summary languages when Chrome adds them.

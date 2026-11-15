@@ -44,7 +44,7 @@ function prepareExtension(dest, real) {
 }
 
 /**
- * Start Chrome. `intercept(request)` (optional) answers requests to *.wikipedia.org locally and returns
+ * Start Chrome. `intercept(request)` (optional) answers requests to *.wikipedia.org and www.wikidata.org locally and returns
  * { status, headers, body } – so the tests never send traffic to Wikipedia.
  */
 async function startChrome({ intercept, real } = {}) {
@@ -97,7 +97,7 @@ async function startChrome({ intercept, real } = {}) {
     send = (method, params = {}) => new Promise((res) => { const i = ++id; pending.set(i, res); ws.send(JSON.stringify({ id: i, method, params })); });
     await send('Runtime.enable');
     await send('Page.enable');
-    if (intercept) await send('Fetch.enable', { patterns: [{ urlPattern: 'https://*.wikipedia.org/*' }] });
+    if (intercept) await send('Fetch.enable', { patterns: [{ urlPattern: 'https://*.wikipedia.org/*' }, { urlPattern: 'https://www.wikidata.org/*' }] });
     const tab = {
       send,
       ev: async (expr) => (await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true })).result.result.value,

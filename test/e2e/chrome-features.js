@@ -10,7 +10,15 @@ const WIKI = {
   fr: [['Ada Exemple', 'mathématicienne fictive', 1]],
 };
 
+const WIKIDATA = { entities: { Q9999999: { claims: {
+  P569: [{ rank: 'normal', mainsnak: { snaktype: 'value', datavalue: { value: { time: '+1815-12-10T00:00:00Z', precision: 11 } } } }],
+  P570: [{ rank: 'normal', mainsnak: { snaktype: 'value', datavalue: { value: { time: '+1852-11-27T00:00:00Z', precision: 11 } } } }],
+} } } };
+
 function intercept(req) {
+  if (/^https:\/\/www\.wikidata\.org\//.test(req.url)) {
+    return { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify(WIKIDATA) };
+  }
   const m = req.url.match(/^https:\/\/([a-z0-9-]+)\.wikipedia\.org\//);
   const pages = ((m && WIKI[m[1]]) || []).map(([title, description, index]) => ({ title, description, index }));
   return { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ query: { pages } }) };
@@ -56,6 +64,8 @@ function intercept(req) {
 
     const timeline = await tab.ev(`(async () => { document.querySelector('.wf-tl-chip').click(); await new Promise(r => setTimeout(r, 200)); return { items: document.querySelectorAll('.wf-tl-item').length, open: !document.querySelector('.wf-tlp').hidden }; })()`);
     expect('timeline panel opens with events', timeline.open && timeline.items >= 4, timeline);
+    const wd = await tab.ev(`(() => [...document.querySelectorAll('.wf-tl-item')].filter(li => /Wikidata|ויקינתונים/.test(li.querySelector('.wf-tl-sec') ? li.querySelector('.wf-tl-sec').textContent : '')).map(li => li.querySelector('.wf-tl-year').textContent))()`);
+    expect('Wikidata birth and death years join the timeline', JSON.stringify(wd) === '["1815","1852"]', wd);
 
     // whatever state this Chrome is in, the summary must end in a sane panel and never start a download by itself
     const summary = await tab.ev(`(async () => {
@@ -71,6 +81,20 @@ function intercept(req) {
       return s;
     })()`);
     expect('summary shows consent, a fallback lead, or a result', summary.consent || summary.lead || summary.items > 0, summary);
+
+    const keys = await tab.ev(`(async () => {
+      const press = (key) => document.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+      const wait = () => new Promise(r => setTimeout(r, 150));
+      const before = document.documentElement.dataset.wfTheme;
+      press('t'); await wait();
+      const after = document.documentElement.dataset.wfTheme;
+      press('?'); await wait();
+      const help = document.querySelector('.wf-help');
+      const helpOpen = !!help && !help.hidden;
+      press('Escape'); await wait();
+      return { before, after, helpOpen, helpClosed: help.hidden };
+    })()`);
+    expect('"t" cycles the theme and "?" opens and Escape closes the shortcuts help', keys.before !== keys.after && keys.helpOpen && keys.helpClosed, keys);
 
     const lightbox = await tab.ev(`(async () => {
       document.querySelector('.wf-cover img').click();

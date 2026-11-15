@@ -1,0 +1,43 @@
+# Fiche Chrome Web Store – français
+
+Add this language in the Developer Dashboard → Store listing → add language. Same structure as every other language (see `AGENTS.md`, "Store listings in 8 languages"). Keep all eight in step.
+
+## Nom
+WikiLume – Lecteur Wikipédia épuré
+
+## Description courte (max. 132)
+Une lecture épurée et moderne de Wikipédia : thèmes, sommaire, favoris, recherche multilingue. Gratuit, sans compte.
+
+## Description détaillée
+
+WikiLume transforme Wikipédia en une expérience de lecture calme et moderne. Tout est gratuit : pas de compte, pas d’abonnement, pas de publicité, pas de suivi.
+
+CE QUE VOUS OBTENEZ
+• Une mise en page épurée : grand titre, courte description, temps de lecture et date de dernière modification
+• Un sommaire flottant qui met en évidence la section où vous vous trouvez
+• L’infobox dans une colonne latérale, pour que le texte reste lisible
+• Des thèmes : automatique, clair, sépia et sombre, avec tableaux, modèles et formules adaptés à chacun
+• Le choix de la police, de la taille du texte et de la largeur de lecture
+• Des aperçus au survol des liens et des références
+• Une recherche avec suggestions (appuyez sur / pour y accéder), un bouton article au hasard et un sélecteur de langue
+• La recherche multilingue : cochez d’autres Wikipédias à côté de la barre de recherche et comparez leurs résultats côte à côte
+• Des favoris : enregistrez des articles, filtrez-les, exportez-les et importez-les sous forme de fichier ; disponibles dans la page et dans la fenêtre de la barre d’outils
+• Une frise chronologique : événements datés tirés du texte, plus les dates de naissance, de décès et de fondation issues de Wikidata
+• Un historique de lecture avec un bouton « Reprendre la lecture » (stocké uniquement sur votre appareil, désactivable)
+• Des raccourcis clavier (appuyez sur ? dans un article) et la commande Alt+Maj+W pour passer du lecteur à l’affichage d’origine de Wikipédia
+• Un résumé rédigé sur votre appareil par l’IA intégrée à Chrome. Elle demande votre accord avant le téléchargement unique du modèle (plusieurs Go) et, si l’IA n’est pas disponible, affiche le début de l’article. Le modèle de Chrome n’écrit qu’en anglais, espagnol et japonais
+• Une grande photo de couverture pour les images en format paysage et une visionneuse avec légendes et navigation au clavier
+• La lecture à voix haute, la prise en charge complète de l’écriture de droite à gauche, une interface en anglais ou en hébreu et un « affichage d’origine » en un clic dans chaque onglet
+
+RESPECT DE LA VIE PRIVÉE
+• Pas de compte, pas de statistiques, pas de publicité, pas de code distant
+• Le seul trafic réseau est destiné aux serveurs de Wikimedia (Wikipédia et Wikidata), ceux que la page utilise déjà
+• Vos réglages, vos favoris et votre historique de lecture restent dans votre navigateur
+• La seule autorisation demandée est « storage »
+
+COMMENT ÇA MARCHE
+WikiLume conserve le contenu même de l’article de Wikipédia (les modèles, tableaux et formules continuent donc de fonctionner) et remplace seulement l’habillage de la page. Vous pouvez le désactiver à tout moment depuis la fenêtre de la barre d’outils, ou cliquer sur « affichage d’origine » pour voir la page habituelle.
+
+Les articles de Wikipédia sont disponibles sous licence CC BY-SA 4.0, et chaque page conserve un lien vers l’article source et son historique.
+
+WikiLume est un projet indépendant. Il n’est ni affilié à la Fondation Wikimedia ni approuvé par elle. Wikipédia est une marque de la Fondation Wikimedia.

@@ -171,6 +171,25 @@
   function main() {
     if (!quickGate()) return;
 
+    // the browser-level "toggle reader" command (see background.js): flip between the reader and Wikipedia's own view
+    try {
+      chrome.runtime.onMessage.addListener((msg) => {
+        if (!msg || msg.type !== 'wf-toggle') return;
+        if (bypassed()) {
+          try {
+            sessionStorage.removeItem(BYPASS_KEY);
+          } catch (e) {
+            /* ignore */
+          }
+          location.reload();
+        } else {
+          goOriginal();
+        }
+      });
+    } catch (e) {
+      /* no extension runtime (mock page tests) */
+    }
+
     if (bypassed()) {
       html.classList.add('wf-bypass');
       WF.loadSettings().then((s) => {
@@ -427,6 +446,7 @@
     wireKeys();
     BM.onChange(refreshBookmarkChip);
     refreshBookmarkChip();
+    wireHistory();
     wireLightbox();
     scheduleTimeline();
     loadMeta(title, !!infobox);
@@ -964,6 +984,7 @@
     text.append(meta);
 
     const actions = h('div', 'wf-actions');
+    ui.actions = actions;
     const bm = h('button', 'wf-chip wf-bm-chip', icon('bookmark'), h('span', null, t('save')));
     bm.type = 'button';
     bm.setAttribute('aria-pressed', 'false');
@@ -1122,16 +1143,38 @@
 
   /* ---- timeline (dated sentences picked from the text) ---- */
 
+  let wdEvents = []; // dated facts about the subject from Wikidata (born, died, founded…), see src/wikidata.js
+
+  function updateTlChip() {
+    if (ui.tlChip && tlEvents.length + wdEvents.length >= 4) ui.tlChip.hidden = false;
+  }
+
+  /** Best effort: any failure (offline, no item, blocked) leaves the timeline exactly as the text heuristic made it. */
+  async function loadWikidata(qid) {
+    const WD = WF.wikidata;
+    const url = WD && WD.entityUrl(qid);
+    if (!url) return;
+    try {
+      const r = await fetch(url);
+      if (!r.ok) return;
+      wdEvents = WD.parseEntity(await r.json(), qid);
+      updateTlChip();
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
   function scheduleTimeline() {
     const go = () => {
       try {
         tlEvents = TL.extractEvents(getBlocks());
-        if (tlEvents.length >= 4 && ui.tlChip) ui.tlChip.hidden = false;
+        updateTlChip();
       } catch (e) {
         console.warn('[WikiLume] timeline failed', e);
       }
     };
-    (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(go);
+    if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(go);
+    else setTimeout(go, 300);
   }
 
   function jumpTo(el) {
@@ -1144,10 +1187,12 @@
   function toggleTimeline() {
     if (!panels.tl) {
       const p = makePanel('wf-tlp', 'timeline', t('timeline'), ui.tlChip);
-      p.sub.textContent = t('timelineCount', { n: tlEvents.length });
+      const events = WF.wikidata ? WF.wikidata.mergeEvents(tlEvents, wdEvents) : tlEvents;
+      p.sub.textContent = t('timelineCount', { n: events.length });
       const ol = h('ol', 'wf-tl');
-      for (const ev of tlEvents) {
-        const btn = h('button', null, h('span', 'wf-tl-year', String(ev.year)), h('span', 'wf-tl-text', ev.text), ev.section ? h('small', 'wf-tl-sec', ev.section) : null);
+      for (const ev of events) {
+        const wd = ev.source === 'wikidata';
+        const btn = h('button', null, h('span', 'wf-tl-year', String(ev.year)), h('span', 'wf-tl-text', wd ? t(ev.kind) : ev.text), wd ? h('small', 'wf-tl-sec', t('wdSource')) : ev.section ? h('small', 'wf-tl-sec', ev.section) : null);
         btn.type = 'button';
         btn.addEventListener('click', () => jumpTo(ev.el));
         ol.append(h('li', 'wf-tl-item', btn));
@@ -1419,6 +1464,52 @@
     frame();
   }
 
+  /* ---- reading history: remember the article and how far you got; offer to continue next time ---- */
+
+  async function wireHistory() {
+    const HI = WF.history;
+    if (!HI || !pageBm || settings.history === false) return;
+    let prev = null;
+    try {
+      prev = await HI.get(pageBm.host, pageBm.key);
+    } catch (e) {
+      return; // storage unavailable: no history, nothing else breaks
+    }
+    const pctNow = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      return max > 0 ? HI.clampPct((window.scrollY / max) * 100) : 0;
+    };
+    let last = prev ? prev.pct : 0;
+    const save = (pct) => {
+      last = pct;
+      HI.record({ host: pageBm.host, key: pageBm.key, title: pageBm.title, pct }).catch(() => {});
+    };
+    save(last); // refreshes the timestamp and keeps the old position until the reader moves
+
+    if (prev && prev.pct >= 10 && prev.pct <= 95 && !location.hash && ui.actions) {
+      const chip = h('button', 'wf-chip wf-continue-chip', icon('book'), h('span', null, t('continueReading', { n: prev.pct })));
+      chip.type = 'button';
+      chip.addEventListener('click', () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        window.scrollTo({ top: (max * prev.pct) / 100, behavior: 'smooth' });
+        chip.remove();
+      });
+      ui.actions.append(chip);
+      ui.continueChip = chip;
+    }
+
+    let timer = 0;
+    const flush = () => {
+      clearTimeout(timer);
+      const p = pctNow();
+      if (ui.continueChip && p >= (prev ? prev.pct : 0) - 2) ui.continueChip.remove();
+      const pending = ui.continueChip && ui.continueChip.isConnected; // keep the old position until the reader picks
+      if (!pending && window.scrollY > 40 && p !== last) save(p); // a page that was never scrolled keeps its saved position
+    };
+    window.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(flush, 700); }, { passive: true });
+    window.addEventListener('pagehide', flush);
+  }
+
   function wireKeys() {
     document.addEventListener('keydown', (e) => {
       if (lb.el && !lb.el.hidden) {
@@ -1432,7 +1523,8 @@
       }
       const tag = (e.target.tagName || '').toLowerCase();
       const typing = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
-      if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const plain = !typing && !e.ctrlKey && !e.metaKey && !e.altKey;
+      if (e.key === '/' && plain) {
         e.preventDefault();
         ui.search.focus();
         ui.search.select();
@@ -1440,8 +1532,57 @@
         closePops();
         closeDrawer();
         hideCard();
+        closeHelp();
+      } else if (plain && e.key === 'b') {
+        toggleBookmark();
+      } else if (plain && e.key === 't') {
+        cycleTheme();
+      } else if (plain && e.key === 'o') {
+        goOriginal();
+      } else if (plain && e.key === 's') {
+        toggleSummary();
+      } else if (plain && e.key === '?') {
+        toggleHelp();
       }
     });
+  }
+
+  const THEMES = ['auto', 'light', 'sepia', 'dark'];
+  function cycleTheme() {
+    update({ theme: THEMES[(THEMES.indexOf(settings.theme) + 1) % THEMES.length] });
+  }
+
+  /** Reload the page without the reader (a pill then offers the way back). */
+  function goOriginal() {
+    try {
+      sessionStorage.setItem(BYPASS_KEY, '1');
+    } catch (e) {
+      /* ignore */
+    }
+    location.reload();
+  }
+
+  let helpEl = null;
+  function closeHelp() {
+    if (helpEl) helpEl.hidden = true;
+  }
+  function toggleHelp() {
+    if (!helpEl) {
+      const rows = [
+        ['/', 'keySearch'], ['b', 'keyBookmark'], ['t', 'keyTheme'], ['o', 'keyOriginal'], ['s', 'keySummary'], ['?', 'keyHelp'], ['Esc', 'keyClose'],
+      ];
+      const list = h('dl', 'wf-help-list');
+      for (const [k, label] of rows) list.append(h('dt', null, h('kbd', null, k)), h('dd', null, t(label)));
+      const close = h('button', 'wf-chip', t('closeHelp'));
+      close.type = 'button';
+      close.addEventListener('click', closeHelp);
+      helpEl = h('div', 'wf-help', h('h2', null, t('shortcuts')), list, close);
+      helpEl.setAttribute('role', 'dialog');
+      helpEl.setAttribute('aria-label', t('shortcuts'));
+      helpEl.hidden = true;
+      ui.root.append(helpEl);
+    }
+    helpEl.hidden = !helpEl.hidden;
   }
 
   /* ---------------------------------------------------------------- API metadata: description, hero image, languages, last edit */
@@ -1451,7 +1592,7 @@
     try {
       const q = new URLSearchParams({
         action: 'query', format: 'json', formatversion: '2', redirects: '1', titles: title,
-        prop: 'langlinks|pageimages|description|revisions', lllimit: 'max', llprop: 'url|autonym|langname',
+        prop: 'langlinks|pageimages|description|revisions|pageprops', ppprop: 'wikibase_item', lllimit: 'max', llprop: 'url|autonym|langname',
         piprop: 'thumbnail|original', pithumbsize: '960', rvprop: 'timestamp',
       });
       const r = await fetch('/w/api.php?' + q.toString());
@@ -1461,6 +1602,8 @@
       /* offline – the page still works without the extras */
     }
     if (!page) return;
+
+    loadWikidata(page.pageprops && page.pageprops.wikibase_item);
 
     if (page.description) ui.desc.textContent = page.description;
 
