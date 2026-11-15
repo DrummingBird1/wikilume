@@ -101,6 +101,7 @@ a{color:#0645ad;text-decoration:none} a.new{color:#ba0000}
 <link rel="stylesheet" href="/ext/src/reader.css">
 <script src="/ext/src/i18n.js"></script>
 <script src="/ext/src/bookmarks.js"></script>
+<script src="/ext/src/history.js"></script>
 <script src="/ext/src/timeline.js"></script>
 <script src="/ext/src/summary.js"></script>
 <script src="/ext/src/content.js"></script>

@@ -446,6 +446,7 @@
     wireKeys();
     BM.onChange(refreshBookmarkChip);
     refreshBookmarkChip();
+    wireHistory();
     wireLightbox();
     scheduleTimeline();
     loadMeta(title, !!infobox);
@@ -983,6 +984,7 @@
     text.append(meta);
 
     const actions = h('div', 'wf-actions');
+    ui.actions = actions;
     const bm = h('button', 'wf-chip wf-bm-chip', icon('bookmark'), h('span', null, t('save')));
     bm.type = 'button';
     bm.setAttribute('aria-pressed', 'false');
@@ -1437,6 +1439,52 @@
     );
     window.addEventListener('resize', () => requestAnimationFrame(frame));
     frame();
+  }
+
+  /* ---- reading history: remember the article and how far you got; offer to continue next time ---- */
+
+  async function wireHistory() {
+    const HI = WF.history;
+    if (!HI || !pageBm || settings.history === false) return;
+    let prev = null;
+    try {
+      prev = await HI.get(pageBm.host, pageBm.key);
+    } catch (e) {
+      return; // storage unavailable: no history, nothing else breaks
+    }
+    const pctNow = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      return max > 0 ? HI.clampPct((window.scrollY / max) * 100) : 0;
+    };
+    let last = prev ? prev.pct : 0;
+    const save = (pct) => {
+      last = pct;
+      HI.record({ host: pageBm.host, key: pageBm.key, title: pageBm.title, pct }).catch(() => {});
+    };
+    save(last); // refreshes the timestamp and keeps the old position until the reader moves
+
+    if (prev && prev.pct >= 10 && prev.pct <= 95 && !location.hash && ui.actions) {
+      const chip = h('button', 'wf-chip wf-continue-chip', icon('book'), h('span', null, t('continueReading', { n: prev.pct })));
+      chip.type = 'button';
+      chip.addEventListener('click', () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        window.scrollTo({ top: (max * prev.pct) / 100, behavior: 'smooth' });
+        chip.remove();
+      });
+      ui.actions.append(chip);
+      ui.continueChip = chip;
+    }
+
+    let timer = 0;
+    const flush = () => {
+      clearTimeout(timer);
+      const p = pctNow();
+      if (ui.continueChip && p >= (prev ? prev.pct : 0) - 2) ui.continueChip.remove();
+      const pending = ui.continueChip && ui.continueChip.isConnected; // keep the old position until the reader picks
+      if (!pending && window.scrollY > 40 && p !== last) save(p); // a page that was never scrolled keeps its saved position
+    };
+    window.addEventListener('scroll', () => { clearTimeout(timer); timer = setTimeout(flush, 700); }, { passive: true });
+    window.addEventListener('pagehide', flush);
   }
 
   function wireKeys() {

@@ -23,6 +23,13 @@
       keyHelp: 'Show this help',
       keyClose: 'Close panels and this help',
       closeHelp: 'Close',
+      tabHistory: 'History',
+      histEmpty: 'Nothing here yet. Articles you read show up here.',
+      histClear: 'Clear history',
+      histRemember: 'Remember reading history',
+      histRememberHint: 'Stored only in this browser',
+      histProgress: '{n}% read',
+      continueReading: 'Continue reading ({n}%)',
       contents: 'Contents',
       intro: 'Introduction',
       readingTime: '{n} min read',
@@ -115,6 +122,13 @@
       keyHelp: 'הצגת העזרה הזו',
       keyClose: 'סגירת חלוניות והעזרה',
       closeHelp: 'סגירה',
+      tabHistory: 'היסטוריה',
+      histEmpty: 'עדיין ריק. ערכים שתקראו יופיעו כאן.',
+      histClear: 'ניקוי היסטוריה',
+      histRemember: 'זכירת היסטוריית קריאה',
+      histRememberHint: 'נשמר רק בדפדפן הזה',
+      histProgress: '{n}% נקראו',
+      continueReading: 'המשך קריאה ({n}%)',
       contents: 'תוכן עניינים',
       intro: 'פתיח',
       readingTime: '{n} דק׳ קריאה',
@@ -198,6 +212,7 @@
     cover: true, // wide cover photo above the article when the lead image is landscape
     searchLangs: [], // extra Wikipedia language codes to search alongside the current one
     uiLang: 'auto', // auto | en | he
+    history: true, // remember articles and scroll position on this device (never leaves the browser)
   };
 
   /** Languages offered for multi-language search: [code, name in its own language]. */

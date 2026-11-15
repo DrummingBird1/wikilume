@@ -31,6 +31,21 @@ const STATE = `(() => {
     expect('removing in tab A works', JSON.stringify(await a.ev(STATE)) === JSON.stringify({ saved: false, rows: 0 }));
     expect('tab B follows through storage.onChanged', JSON.stringify(await b.ev(STATE)) === JSON.stringify({ saved: false, rows: 0 }));
 
+    // reading history: scroll half way (on a page made tall enough), reload, and the "continue reading" chip must appear
+    const h1 = await browser.newTab(PAGE);
+    await h1.ev(`(async () => {
+      await new Promise(r => setTimeout(r, 2000)); // let the reader finish building and attach the scroll listener
+      const pad = document.createElement('div'); pad.style.height = '4000px'; document.getElementById('wf-root').append(pad);
+      await new Promise(r => setTimeout(r, 300));
+      window.scrollTo(0, (document.documentElement.scrollHeight - innerHeight) / 2);
+      await new Promise(r => setTimeout(r, 1500));
+    })()`);
+    await h1.nav(PAGE);
+    await new Promise((r) => setTimeout(r, 1500)); // the saved position is read asynchronously
+    const chip = await h1.ev(`(() => { const c = document.querySelector('.wf-continue-chip'); return c ? c.textContent : null; })()`);
+    expect('reopening a half-read article offers "continue reading"', !!chip && /\d+%/.test(chip), chip);
+    h1.close();
+
     expect('no console errors or exceptions in the page', browser.problems.length === 0, browser.problems);
     a.close();
     b.close();

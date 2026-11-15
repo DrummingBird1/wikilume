@@ -2,16 +2,18 @@
   'use strict';
   const $ = (id) => document.getElementById(id);
   const BM = WF.bookmarks;
+  const HI = WF.history;
   let settings;
   let tab = null; // 'saved' | 'settings' – chosen once, after the first load
   let all = [];
+  let hist = [];
 
   const T = () => WF.makeT(WF.resolveLang(settings.uiLang, ''));
 
   function renderTabs(t) {
     const box = $('tabs');
     box.replaceChildren();
-    [['saved', t('tabSaved') + (all.length ? ' (' + all.length + ')' : '')], ['settings', t('tabSettings')]].forEach(([id, label]) => {
+    [['saved', t('tabSaved') + (all.length ? ' (' + all.length + ')' : '')], ['history', t('tabHistory')], ['settings', t('tabSettings')]].forEach(([id, label]) => {
       const b = document.createElement('button');
       b.type = 'button';
       b.setAttribute('role', 'tab');
@@ -21,6 +23,7 @@
       box.append(b);
     });
     $('panelSaved').hidden = tab !== 'saved';
+    $('panelHistory').hidden = tab !== 'history';
     $('panelSettings').hidden = tab !== 'settings';
   }
 
@@ -38,6 +41,17 @@
     ex.disabled = !all.length;
   }
 
+  function renderHistory(t) {
+    // reuse the bookmark row renderer: the progress goes where the description would be
+    const rows = hist.map((e) => ({ host: e.host, key: e.key, title: e.title, desc: t('histProgress', { n: e.pct }), thumb: '' }));
+    BM.renderList($('histList'), rows, { t, newTab: true, onRemove: (e) => HI.remove(e.host, e.key) });
+    $('histEmpty').hidden = !!hist.length;
+    $('histEmpty').textContent = t('histEmpty');
+    const c = $('histClear');
+    c.textContent = t('histClear');
+    c.disabled = !hist.length;
+  }
+
   function render() {
     const t = T();
     const lang = WF.resolveLang(settings.uiLang, '');
@@ -47,17 +61,21 @@
     $('free').textContent = t('popupFree');
     renderTabs(t);
     renderSaved(t);
+    renderHistory(t);
 
     $('enableLabel').textContent = t('enable');
     $('enableHint').textContent = t('enableHint');
     $('themeLabel').textContent = t('theme');
     $('previewsLabel').textContent = t('previews');
+    $('histLabel').textContent = t('histRemember');
+    $('histHint').textContent = t('histRememberHint');
     $('langLabel').textContent = t('uiLanguage');
     $('hint').textContent = t('reloadHint');
     $('about').textContent = t('about');
 
     $('enabled').checked = !!settings.enabled;
     $('previews').checked = !!settings.previews;
+    $('historyOn').checked = settings.history !== false;
 
     const seg = $('theme');
     seg.replaceChildren();
@@ -93,6 +111,9 @@
   }
 
   $('enabled').addEventListener('change', (e) => save({ enabled: e.target.checked }));
+  $('historyOn').addEventListener('change', (e) => save({ history: e.target.checked }));
+  $('histClear').addEventListener('click', () => HI.clear());
+  HI.onChange(async () => { hist = await HI.list(); if (settings) render(); });
   $('previews').addEventListener('change', (e) => save({ previews: e.target.checked }));
   $('uiLang').addEventListener('change', (e) => save({ uiLang: e.target.value }));
   $('bmFilter').addEventListener('input', () => renderSaved(T()));
@@ -101,9 +122,10 @@
   });
   BM.onChange(reloadList);
 
-  Promise.all([WF.loadSettings(), BM.list()]).then(([s, list]) => {
+  Promise.all([WF.loadSettings(), BM.list(), HI.list()]).then(([s, list, h]) => {
     settings = s;
     all = list;
+    hist = h;
     tab = all.length ? 'saved' : 'settings';
     render();
   });
