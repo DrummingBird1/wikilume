@@ -102,6 +102,7 @@ a{color:#0645ad;text-decoration:none} a.new{color:#ba0000}
 <script src="/ext/src/i18n.js"></script>
 <script src="/ext/src/bookmarks.js"></script>
 <script src="/ext/src/history.js"></script>
+<script src="/ext/src/wikidata.js"></script>
 <script src="/ext/src/timeline.js"></script>
 <script src="/ext/src/summary.js"></script>
 <script src="/ext/src/content.js"></script>
@@ -154,7 +155,8 @@ http.createServer((req, res) => {
     const wide = (u.searchParams.get('titles') || '').includes('Wide');
     return json(res, { query: { pages: [{ pageid: 1, title: 'Ada Example', description: 'Fictional mathematician and writer',
       thumbnail: wide ? { source: '/img/wide.svg', width: 960, height: 400 } : { source: '/img/portrait.svg', width: 220, height: 220 },
-      original: wide ? { source: '/img/wide.svg', width: 3000, height: 1250 } : undefined, revisions: [{ timestamp: '2026-10-03T10:20:00Z' }],
+      original: wide ? { source: '/img/wide.svg', width: 3000, height: 1250 } : undefined,
+      pageprops: wide ? { wikibase_item: 'Q9999999' } : undefined, // only the page that has a Wikidata intercept in chrome-features.js revisions: [{ timestamp: '2026-10-03T10:20:00Z' }],
       langlinks: [['he', 'עברית', 'Hebrew', 'עדה דוגמה'], ['fr', 'français', 'French', 'Ada Exemple'], ['de', 'Deutsch', 'German', 'Ada Beispiel'], ['es', 'español', 'Spanish', 'Ada Ejemplo']].map(([lang, autonym, langname, title]) => ({ lang, autonym, langname, title, url: `https://${lang}.example.org/wiki/${encodeURIComponent(title)}` })) }] } });
   }
   if (p === '/w/rest.php/v1/search/title') {

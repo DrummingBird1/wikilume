@@ -1143,11 +1143,32 @@
 
   /* ---- timeline (dated sentences picked from the text) ---- */
 
+  let wdEvents = []; // dated facts about the subject from Wikidata (born, died, founded…), see src/wikidata.js
+
+  function updateTlChip() {
+    if (ui.tlChip && tlEvents.length + wdEvents.length >= 4) ui.tlChip.hidden = false;
+  }
+
+  /** Best effort: any failure (offline, no item, blocked) leaves the timeline exactly as the text heuristic made it. */
+  async function loadWikidata(qid) {
+    const WD = WF.wikidata;
+    const url = WD && WD.entityUrl(qid);
+    if (!url) return;
+    try {
+      const r = await fetch(url);
+      if (!r.ok) return;
+      wdEvents = WD.parseEntity(await r.json(), qid);
+      updateTlChip();
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
   function scheduleTimeline() {
     const go = () => {
       try {
         tlEvents = TL.extractEvents(getBlocks());
-        if (tlEvents.length >= 4 && ui.tlChip) ui.tlChip.hidden = false;
+        updateTlChip();
       } catch (e) {
         console.warn('[WikiLume] timeline failed', e);
       }
@@ -1166,10 +1187,12 @@
   function toggleTimeline() {
     if (!panels.tl) {
       const p = makePanel('wf-tlp', 'timeline', t('timeline'), ui.tlChip);
-      p.sub.textContent = t('timelineCount', { n: tlEvents.length });
+      const events = WF.wikidata ? WF.wikidata.mergeEvents(tlEvents, wdEvents) : tlEvents;
+      p.sub.textContent = t('timelineCount', { n: events.length });
       const ol = h('ol', 'wf-tl');
-      for (const ev of tlEvents) {
-        const btn = h('button', null, h('span', 'wf-tl-year', String(ev.year)), h('span', 'wf-tl-text', ev.text), ev.section ? h('small', 'wf-tl-sec', ev.section) : null);
+      for (const ev of events) {
+        const wd = ev.source === 'wikidata';
+        const btn = h('button', null, h('span', 'wf-tl-year', String(ev.year)), h('span', 'wf-tl-text', wd ? t(ev.kind) : ev.text), wd ? h('small', 'wf-tl-sec', t('wdSource')) : ev.section ? h('small', 'wf-tl-sec', ev.section) : null);
         btn.type = 'button';
         btn.addEventListener('click', () => jumpTo(ev.el));
         ol.append(h('li', 'wf-tl-item', btn));
@@ -1569,7 +1592,7 @@
     try {
       const q = new URLSearchParams({
         action: 'query', format: 'json', formatversion: '2', redirects: '1', titles: title,
-        prop: 'langlinks|pageimages|description|revisions', lllimit: 'max', llprop: 'url|autonym|langname',
+        prop: 'langlinks|pageimages|description|revisions|pageprops', ppprop: 'wikibase_item', lllimit: 'max', llprop: 'url|autonym|langname',
         piprop: 'thumbnail|original', pithumbsize: '960', rvprop: 'timestamp',
       });
       const r = await fetch('/w/api.php?' + q.toString());
@@ -1579,6 +1602,8 @@
       /* offline – the page still works without the extras */
     }
     if (!page) return;
+
+    loadWikidata(page.pageprops && page.pageprops.wikibase_item);
 
     if (page.description) ui.desc.textContent = page.description;
 
