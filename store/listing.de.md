@@ -1,6 +1,6 @@
 # Chrome-Web-Store-Eintrag – Deutsch
 
-Add this language in the Developer Dashboard → Store listing → add language. Same structure as every other language (see `AGENTS.md`, "Store listings in 8 languages"). Keep all eight in step.
+Add this language in the Developer Dashboard → Store listing → add language. The detailed description is in `descriptions/de.txt` (paste the whole file); everything on this page is notes. Same structure as every other language (see `AGENTS.md`).
 
 ## Name
 WikiLume – Aufgeräumter Wikipedia-Reader
@@ -8,36 +8,5 @@ WikiLume – Aufgeräumter Wikipedia-Reader
 ## Kurzbeschreibung (max. 132)
 Wikipedia modern und ruhig lesen: Themes, Inhaltsverzeichnis, Lesezeichen, mehrsprachige Suche. Kostenlos, ohne Konto.
 
-## Ausführliche Beschreibung
-
-WikiLume macht aus Wikipedia ein ruhiges, modernes Leseerlebnis. Alles ist kostenlos: kein Konto, kein Abo, keine Werbung, kein Tracking.
-
-DAS BEKOMMEN SIE
-• Ein aufgeräumtes Layout: große Überschrift, Kurzbeschreibung, Lesezeit und Datum der letzten Bearbeitung
-• Ein schwebendes Inhaltsverzeichnis, das den aktuellen Abschnitt hervorhebt
-• Die Infobox in einer Seitenspalte, damit der Text gut lesbar bleibt
-• Themes: automatisch, hell, Sepia und dunkel – mit angepassten Tabellen, Vorlagen und Formeln
-• Schriftart, Textgröße und Lesebreite nach Wunsch
-• Vorschau beim Überfahren von Links und Einzelnachweisen
-• Suche mit Vorschlägen (mit / aufrufen), Zufallsartikel-Schaltfläche und Sprachumschalter
-• Mehrsprachige Suche: weitere Wikipedias neben dem Suchfeld auswählen und die Ergebnisse nebeneinander vergleichen
-• Lesezeichen: Artikel speichern, filtern, als Datei exportieren und importieren; auf der Seite und im Popup der Symbolleiste verfügbar
-• Zeitleiste: datierte Ereignisse aus dem Artikeltext sowie Geburts-, Sterbe- und Gründungsdaten aus Wikidata
-• Leseverlauf mit der Schaltfläche „Weiterlesen“ (nur auf Ihrem Gerät gespeichert, abschaltbar)
-• Tastaturkürzel (im Artikel ? drücken) und der Befehl Alt+Umschalt+W zum Wechseln zwischen Reader und Original-Ansicht von Wikipedia
-• Zusammenfassung: von der in Chrome integrierten KI auf Ihrem eigenen Gerät erstellt. Sie fragt vor dem einmaligen Download des Modells (mehrere GB) nach und zeigt den Artikelanfang, wenn die KI nicht verfügbar ist. Das Chrome-Modell schreibt nur Englisch, Spanisch und Japanisch
-• Ein breites Titelbild für Querformat-Aufmacher und eine Bildansicht mit Bildunterschriften und Tastaturnavigation
-• Vorlesen, vollständige Unterstützung für Rechts-nach-links-Schrift, Oberfläche auf Englisch oder Hebräisch und eine „Original-Ansicht“ per Klick in jedem Tab
-
-PRIVATSPHÄRE ALS GRUNDPRINZIP
-• Kein Konto, keine Analyse, keine Werbung, kein nachgeladener Code
-• Der einzige Netzwerkverkehr geht an die Server von Wikimedia (Wikipedia und Wikidata), die die Seite ohnehin nutzt
-• Einstellungen, Lesezeichen und Leseverlauf bleiben in Ihrem Browser
-• Die einzige angeforderte Berechtigung ist „storage“
-
-SO FUNKTIONIERT ES
-WikiLume behält den eigentlichen Artikelinhalt von Wikipedia bei (Vorlagen, Tabellen und Formeln funktionieren also weiter) und ersetzt nur den Rahmen um ihn herum. Sie können die Erweiterung jederzeit im Popup der Symbolleiste ausschalten oder mit „Original-Ansicht“ die normale Seite anzeigen.
-
-Wikipedia-Artikel stehen unter der Lizenz CC BY-SA 4.0, und jede Seite enthält weiterhin einen Link zum Originalartikel und zu seiner Versionsgeschichte.
-
-WikiLume ist ein unabhängiges Projekt. Es ist weder mit der Wikimedia Foundation verbunden noch von ihr unterstützt. Wikipedia ist eine Marke der Wikimedia Foundation.
+## Detailed description
+Moved out so it can be pasted whole: [`descriptions/de.txt`](descriptions/de.txt) (plain text, nothing else in the file).

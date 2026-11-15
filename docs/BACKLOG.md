@@ -31,7 +31,7 @@ Open work, known risks and decisions waiting for the owner. Update this file whe
 - [ ] The CI workflow in `.github/workflows/ci.yml` has no run yet (pushes did not trigger it); it now also has `workflow_dispatch`,
   so `gh workflow run ci.yml --ref <branch>` starts it. Confirm it is green once.
 - [ ] Install the published listing from the Web Store in a normal Chrome and open one article.
-- [ ] Hebrew store listing in the dashboard (text in `store/listing.he.md`).
+- [ ] Store listings in the dashboard (paste `store/descriptions/<code>.txt` per language).
 - [ ] Trademark registry search for "WikiLume" (USPTO, EUIPO, Israel Patent Office); see `store/NAME-CHECK.md`.
 - [ ] Flaky e2e checks under Chrome for Testing (summary, `storage.sync` language persistence, second-tab bookmark).
 

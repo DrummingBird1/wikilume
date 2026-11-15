@@ -100,7 +100,7 @@ WikiLume 1.0.0 is **published** in the Chrome Web Store (2026-11-10) and the rep
 - Do not commit `dist/`, secrets or `.env` files.
 - A GitHub Pages deploy sometimes does not start after a push: `gh workflow run pages.yml --ref main` starts it by hand.
 - **Store listings in 8 languages (iron rule).** The listing text exists in English, Hebrew, Spanish, French, German, Portuguese (Brazil),
-  Russian and Japanese: `store/listing.<code>.md` (`en`, `he`, `es`, `fr`, `de`, `pt-BR`, `ru`, `ja`) and the localized name/short description in
+  Russian and Japanese: `store/descriptions/<code>.txt` (the paste-ready detailed description) and `store/listing.<code>.md` (notes, short description) (`en`, `he`, `es`, `fr`, `de`, `pt-BR`, `ru`, `ja`) and the localized name/short description in
   `_locales/<code>/messages.json` (`pt_BR` there). Whenever the extension changes significantly (new or removed feature, permission, network
   domain, data handling, or a big UI change), update **all eight** in the same PR; `npm run check-store` checks that they exist, fit the limits
   and still list the current permission. Keep the same structure in every language (short description, "what you get", "private by design", "how it works").
