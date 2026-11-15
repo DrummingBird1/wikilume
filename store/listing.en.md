@@ -2,16 +2,16 @@
 
 Paste these into the Developer Dashboard → Store listing. Limits are the store's.
 
-## Name (max 75; comes from `manifest.json`)
+## Name (max 75; comes from `_locales/en/messages.json`)
 WikiLume – Clean Wikipedia Reader
 
 > Name chosen: WikiLume (2026-11-09). Before submitting, search the Web Store and trademark registries by hand (see `NAME-CHECK.md`).
 
-## Short description (max 132; comes from `manifest.json` `description`)
-A clean, modern reading experience for Wikipedia. Free, no accounts, no subscriptions. קריאה נקייה ומודרנית בוויקיפדיה – הכול בחינם.
+## Short description (max 132; comes from `_locales/en/messages.json`, must match)
+A clean, modern reading layout for Wikipedia: themes, contents, bookmarks, multi-language search. Free, no accounts.
 
 ## Category
-Productivity (alternative: Accessibility). Language: English, Hebrew.
+Productivity (alternative: Accessibility). Languages: English (default), Hebrew, Spanish, French, German, Portuguese (Brazil), Russian, Japanese. One listing file per language: `listing.<code>.md`; all eight must be updated on every significant change (see `AGENTS.md`).
 
 ## Detailed description (plain text, max 16,000)
 
@@ -36,7 +36,7 @@ WHAT YOU GET
 
 PRIVATE BY DESIGN
 • No account, no analytics, no ads, no remote code
-• The only network traffic is to Wikipedia's own servers, the same ones the page already uses
+• The only network traffic is to Wikimedia's own servers (Wikipedia and Wikidata), the same ones the page already uses
 • Your settings, bookmarks and reading history stay in your browser
 • The only permission requested is "storage"
 
@@ -52,7 +52,7 @@ Restyles Wikipedia article pages into a clean reading layout (table of contents,
 
 ## Permission justification
 - `storage`: saves your reading settings (theme, font, language), your bookmarks and your reading history in the browser. Nothing is sent anywhere.
-- Content script on `*://*.wikipedia.org/*`: this is the single purpose – it reads the Wikipedia article already on the page and re-lays it out. No other sites.
+- Content script on `*://*.wikipedia.org/*`: this is the single purpose – it reads the Wikipedia article already on the page and re-lays it out. No other sites. Dates of the article's subject are read from `www.wikidata.org` with an anonymous cross-origin request (no host permission needed).
 - No remote code, no host permissions beyond that match pattern.
 
 ## Data usage disclosures (dashboard → Privacy practices)

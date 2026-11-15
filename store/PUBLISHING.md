@@ -9,7 +9,7 @@ Everything the store asks for is in this folder. What is left needs the owner (a
 | Icon 128×128 | `icons/icon128.png` (in the zip) |
 | 5 screenshots 1280×800 | `store/screenshots/` (real Wikipedia, real extension code; regenerate with `npm run screenshots`) |
 | Small promo tile 440×280, marquee 1400×560 | `store/promo-*.png` |
-| Listing text, English and Hebrew | `store/listing.en.md`, `store/listing.he.md` |
+| Listing text in 8 languages (en, he, es, fr, de, pt-BR, ru, ja) | `store/listing.<code>.md`; name and short description also in `_locales/<code>/messages.json` |
 | Single purpose, permission reasons, data disclosures | `store/listing.en.md` |
 | Privacy policy page (EN/HE) and project site | `site/` (build with `npm run site`) |
 | Name research | `store/NAME-CHECK.md` |
@@ -25,10 +25,10 @@ Everything the store asks for is in this folder. What is left needs the owner (a
 
 ## Dashboard walkthrough
 1. Add new item → upload `dist/wikilume-<version>-chrome.zip`.
-2. **Store listing**: description from `listing.en.md` (default language), add Hebrew from `listing.he.md`; category Productivity; upload icon, screenshots, small tile and marquee; add the privacy-policy URL and the website URL.
+2. **Store listing**: description from `listing.en.md` (default language), then add each other language (he, es, fr, de, pt-BR, ru, ja) and paste its `listing.<code>.md` (name and short description are filled from the package's `_locales`); category Productivity; upload icon, screenshots, small tile and marquee; add the privacy-policy URL and the website URL.
 3. **Privacy practices**: single purpose and permission reasons from `listing.en.md`; no remote code; data collected: none; tick the three certifications.
 4. **Distribution**: Public, all regions, free.
 5. Submit for review. First reviews of a new developer account typically take from a few days up to a few weeks; the in-page content script on `*.wikipedia.org` is a "specific host" pattern, not "all sites", which keeps review simple.
 
 ## Every later release
-Bump `manifest.json` and `package.json` together, `npm run verify && npm run e2e && npm run pack`, upload the new zip, add notes. Keep the privacy policy, permissions text and screenshots in step with the code (`check-store` guards the permission list).
+Bump `manifest.json` and `package.json` together, `npm run verify && npm run e2e && npm run pack`, upload the new zip, add notes. Keep the privacy policy, permissions text, screenshots and **all eight listings** in step with the code (`check-store` guards the permission list and that every listing exists and matches `_locales`).

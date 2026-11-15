@@ -7,7 +7,7 @@ const zlib = require('zlib');
 
 const root = path.join(__dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'manifest.json'), 'utf8'));
-const DIRS = ['icons', 'popup', 'src'];
+const DIRS = ['icons', 'popup', 'src', '_locales'];
 
 const crcTable = (() => {
   const t = new Uint32Array(256);

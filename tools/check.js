@@ -49,6 +49,22 @@ if (manifest) {
   if ((manifest.background || {}).service_worker) refs.add(manifest.background.service_worker);
   for (const f of refs) if (!exists(f)) fail(`manifest references a missing file: ${f}`);
 
+  // localized name and description: every _locales/<code>/messages.json must define both, and the default locale must exist
+  if (/^__MSG_/.test(manifest.name || '') || /^__MSG_/.test(manifest.description || '')) {
+    if (!manifest.default_locale) fail('manifest uses __MSG_ strings but has no default_locale');
+    else if (!exists(`_locales/${manifest.default_locale}/messages.json`)) fail(`default_locale ${manifest.default_locale} has no _locales folder`);
+    for (const d of exists('_locales') ? fs.readdirSync(path.join(root, '_locales')) : []) {
+      let msgs = {};
+      try {
+        msgs = JSON.parse(read(`_locales/${d}/messages.json`));
+      } catch (e) {
+        fail(`_locales/${d}/messages.json is not valid JSON`);
+        continue;
+      }
+      for (const k of ['extName', 'extDescription']) if (!msgs[k] || !msgs[k].message) fail(`_locales/${d}/messages.json lacks ${k}`);
+    }
+  }
+
   const popup = (manifest.action || {}).default_popup;
   if (popup && exists(popup)) {
     const dir = path.posix.dirname(popup);

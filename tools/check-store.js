@@ -33,8 +33,34 @@ if (shots.length < 1 || shots.length > 5) fail(`store/screenshots: ${shots.lengt
 shots.forEach((f) => expectSize('store/screenshots/' + f, 1280, 800));
 
 // text limits
-if (manifest.name.length > 75) fail(`manifest name is ${manifest.name.length} characters, limit 75`);
-if (manifest.description.length > 132) fail(`manifest description is ${manifest.description.length} characters, limit 132`);
+// name and short description are localized (_locales); the store limits apply to every language
+const LISTING_LANGS = [['en', 'en'], ['he', 'he'], ['es', 'es'], ['fr', 'fr'], ['de', 'de'], ['pt-BR', 'pt_BR'], ['ru', 'ru'], ['ja', 'ja']];
+for (const [code, folder] of LISTING_LANGS) {
+  let msgs = null;
+  try {
+    msgs = JSON.parse(fs.readFileSync(path.join(root, '_locales', folder, 'messages.json'), 'utf8'));
+  } catch (e) {
+    fail(`_locales/${folder}/messages.json is missing or invalid`);
+    continue;
+  }
+  const name = msgs.extName && msgs.extName.message;
+  const desc = msgs.extDescription && msgs.extDescription.message;
+  if (!name || name.length > 75) fail(`${folder}: name missing or longer than 75 characters`);
+  if (!desc || desc.length > 132) fail(`${folder}: short description missing or longer than 132 characters`);
+  // the iron rule (AGENTS.md): one listing per language, in step with the manifest strings and the permission list
+  const lf = `store/listing.${code}.md`;
+  if (!fs.existsSync(path.join(root, lf))) {
+    fail(`${lf} is missing (store listings must exist in all 8 languages)`);
+    continue;
+  }
+  const text = fs.readFileSync(path.join(root, lf), 'utf8');
+  if (desc && !text.includes(desc)) fail(`${lf}: short description differs from _locales/${folder}/messages.json`);
+  if (!/storage/.test(text)) fail(`${lf}: does not mention the "storage" permission`);
+  if (!/CC BY-SA 4\.0/.test(text)) fail(`${lf}: lacks the CC BY-SA 4.0 notice`);
+  if (text.length > 16000) fail(`${lf}: longer than the store's 16,000 characters`);
+  ok.push(lf);
+}
+if (manifest.default_locale !== 'en') fail('default_locale must be en');
 if (JSON.stringify(manifest.permissions) !== '["storage"]') fail('permissions changed: update store/listing.en.md justification and the privacy policy first');
 if (manifest.host_permissions && manifest.host_permissions.length) fail('host_permissions present: needs a written justification in store/listing.en.md');
 if (manifest.version !== JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).version) fail('manifest and package versions differ');
