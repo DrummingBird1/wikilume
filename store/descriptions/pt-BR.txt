@@ -1,0 +1,31 @@
+O WikiLume transforma a Wikipédia em uma experiência de leitura tranquila e moderna. Tudo é grátis: sem conta, sem assinatura, sem anúncios e sem rastreamento.
+
+O QUE VOCÊ RECEBE
+• Um layout limpo: título grande, descrição curta, tempo de leitura e data da última edição
+• Um sumário flutuante que destaca a seção em que você está
+• A caixa de informações em uma coluna lateral, para o texto continuar legível
+• Temas: automático, claro, sépia e escuro, com tabelas, predefinições e fórmulas adaptadas a cada um
+• Fonte, tamanho do texto e largura de leitura à sua escolha
+• Pré-visualizações ao passar o mouse sobre links e citações
+• Busca com sugestões (pressione / para focá-la), botão de artigo aleatório e seletor de idioma
+• Busca em vários idiomas: marque outras Wikipédias ao lado da caixa de busca e compare os resultados lado a lado
+• Favoritos: salve artigos, filtre, exporte e importe como arquivo; disponíveis na página e no pop-up da barra de ferramentas
+• Linha do tempo: eventos com data extraídos do texto, mais datas de nascimento, morte e fundação do Wikidata
+• Histórico de leitura com o botão «Continuar lendo» (guardado só no seu dispositivo, pode ser desativado)
+• Atalhos de teclado (pressione ? em um artigo) e o comando Alt+Shift+W para alternar entre o leitor e a visualização original da Wikipédia
+• Resumo: escrito no seu próprio dispositivo pela IA integrada do Chrome. Ela pergunta antes de baixar o modelo uma única vez (vários GB) e, se a IA não estiver disponível, mostra o início do artigo. O modelo do Chrome escreve apenas em inglês, espanhol e japonês
+• Uma foto de capa panorâmica para imagens horizontais e um visualizador de imagens com legendas e navegação pelo teclado
+• Leitura em voz alta, suporte completo a escrita da direita para a esquerda, interface em inglês ou hebraico e «visualização original» com um clique em qualquer guia
+
+PRIVACIDADE POR PADRÃO
+• Sem conta, sem análises, sem anúncios, sem código remoto
+• O único tráfego de rede vai para os servidores da Wikimedia (Wikipédia e Wikidata), os mesmos que a página já usa
+• Suas configurações, favoritos e histórico de leitura ficam no seu navegador
+• A única permissão solicitada é «storage»
+
+COMO FUNCIONA
+O WikiLume mantém o próprio conteúdo do artigo da Wikipédia (assim predefinições, tabelas e fórmulas continuam funcionando) e substitui apenas a moldura da página. Você pode desativá-lo a qualquer momento no pop-up da barra de ferramentas ou clicar em «visualização original» para ver a página normal.
+
+Os artigos da Wikipédia estão disponíveis sob a licença CC BY-SA 4.0, e cada página mantém um link para o artigo original e seu histórico.
+
+O WikiLume é um projeto independente. Não é afiliado à Fundação Wikimedia nem endossado por ela. Wikipédia é uma marca da Fundação Wikimedia.

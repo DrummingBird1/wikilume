@@ -1,6 +1,6 @@
 # Chrome ウェブストア掲載情報 – 日本語
 
-Add this language in the Developer Dashboard → Store listing → add language. Same structure as every other language (see `AGENTS.md`, "Store listings in 8 languages"). Keep all eight in step.
+Add this language in the Developer Dashboard → Store listing → add language. The detailed description is in `descriptions/ja.txt` (paste the whole file); everything on this page is notes. Same structure as every other language (see `AGENTS.md`).
 
 ## 名前
 WikiLume – すっきり読めるWikipedia
@@ -8,36 +8,5 @@ WikiLume – すっきり読めるWikipedia
 ## 短い説明（最大132文字）
 Wikipediaをすっきり快適に読める拡張機能。テーマ、目次、ブックマーク、多言語検索。無料、アカウント不要。
 
-## 詳細な説明
-
-WikiLumeは、Wikipediaを落ち着いたモダンな読書体験に変えます。すべて無料で、アカウント登録も、サブスクリプションも、広告も、トラッキングもありません。
-
-主な機能
-• すっきりしたレイアウト：大きなタイトル、短い説明、読了時間、最終更新日
-• 現在のセクションを強調表示する、追従型の目次
-• 本文を読みやすく保つため、情報ボックスをサイド列に配置
-• テーマ：自動、ライト、セピア、ダーク。表、テンプレート、数式もそれぞれに合わせて調整
-• フォント、文字サイズ、読みやすい行幅を選択可能
-• リンクや脚注にカーソルを合わせるとプレビューを表示
-• 候補付き検索（/ キーで検索欄に移動）、おまかせ表示ボタン、言語切り替え
-• 多言語検索：検索欄の横で他の言語版Wikipediaを選ぶと、結果を並べて比較できます
-• ブックマーク：記事の保存、絞り込み、ファイルでのエクスポートとインポート。ページ上でもツールバーのポップアップでも利用可能
-• 年表：記事本文から抜き出した日付付きの出来事に加え、Wikidataの生年月日・没年月日・設立日を表示
-• 「続きを読む」ボタン付きの閲覧履歴（お使いの端末にのみ保存され、オフにもできます）
-• キーボードショートカット（記事内で ? を押す）と、リーダーとWikipedia標準表示を切り替える Alt+Shift+W コマンド
-• 要約：Chrome内蔵のAIがお使いの端末上で作成します。モデルの初回ダウンロード（数GB）の前に必ず確認し、AIが使えない場合は記事の冒頭を表示します。Chromeのモデルが出力できるのは英語、スペイン語、日本語のみです
-• 横長のリード画像用のワイドなカバー写真と、キャプションとキーボード操作に対応した画像ビューア
-• 読み上げ、右から左へ書く言語への完全対応、英語またはヘブライ語のインターフェース、どのタブでもワンクリックで「元の表示」に切り替え
-
-プライバシーを最優先
-• アカウント不要、解析なし、広告なし、リモートコードなし
-• ネットワーク通信は、ページがすでに使っているWikimediaのサーバー（WikipediaとWikidata）宛てのみ
-• 設定、ブックマーク、閲覧履歴はお使いのブラウザー内にとどまります
-• 要求する権限は「storage」のみ
-
-しくみ
-WikiLumeはWikipedia自身の記事コンテンツをそのまま使い（テンプレート、表、数式も引き続き動作します）、周囲のページ枠だけを置き換えます。ツールバーのポップアップからいつでもオフにでき、「元の表示」を押すと通常のページを確認できます。
-
-Wikipediaの記事はCC BY-SA 4.0ライセンスで提供されており、各ページには元の記事と編集履歴へのリンクが残ります。
-
-WikiLumeは独立したプロジェクトです。ウィキメディア財団とは提携しておらず、承認も受けていません。Wikipediaはウィキメディア財団の商標です。
+## Detailed description
+Moved out so it can be pasted whole: [`descriptions/ja.txt`](descriptions/ja.txt) (plain text, nothing else in the file).

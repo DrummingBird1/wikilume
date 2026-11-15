@@ -13,39 +13,8 @@ A clean, modern reading layout for Wikipedia: themes, contents, bookmarks, multi
 ## Category
 Productivity (alternative: Accessibility). Languages: English (default), Hebrew, Spanish, French, German, Portuguese (Brazil), Russian, Japanese. One listing file per language: `listing.<code>.md`; all eight must be updated on every significant change (see `AGENTS.md`).
 
-## Detailed description (plain text, max 16,000)
-
-WikiLume turns Wikipedia into a calm, modern reading experience. Everything is free: no account, no subscription, no ads, no tracking.
-
-WHAT YOU GET
-• A clean layout: large title, short description, reading time and last-edited date
-• A floating table of contents that highlights the section you are in
-• The infobox in a side column, so the text stays readable
-• Themes: automatic, light, sepia and dark – with tables, templates and formulas adapted to each
-• Your choice of font, text size and reading width
-• Hover previews for links and citations
-• Search with suggestions (press / to focus it), a random-article button and a language switcher
-• Multi-language search: tick extra Wikipedias next to the search box and see their results side by side
-• Bookmarks: save articles, filter them, export and import as a file; available in the page and in the toolbar popup
-• Timeline: dated events picked out of the article text, plus birth, death and founding dates from Wikidata
-• Reading history with a "continue reading" button (stored only on your device; you can switch it off)
-• Keyboard shortcuts (press ? in an article) and an Alt+Shift+W command to switch between the reader and Wikipedia's own view
-• Summary: written on your own device by Chrome's built-in AI. It asks first before the one-time model download (several GB), and falls back to the article's opening when the AI is not available. Chrome's on-device model writes English, Spanish and Japanese only, so Hebrew articles show the opening instead
-• A wide cover photo for landscape lead images, and a lightbox with captions and keyboard navigation
-• Read-aloud, full right-to-left support, English or Hebrew interface, and a one-click "original view" for any tab
-
-PRIVATE BY DESIGN
-• No account, no analytics, no ads, no remote code
-• The only network traffic is to Wikimedia's own servers (Wikipedia and Wikidata), the same ones the page already uses
-• Your settings, bookmarks and reading history stay in your browser
-• The only permission requested is "storage"
-
-HOW IT WORKS
-WikiLume keeps Wikipedia's own article content (so templates, tables and formulas keep working) and replaces the page chrome around it. Turn it off at any time from the toolbar popup, or press "original view" to see the normal page.
-
-Wikipedia articles are available under CC BY-SA 4.0, and every page keeps a link to the source article and its history.
-
-WikiLume is an independent project. It is not affiliated with or endorsed by the Wikimedia Foundation. Wikipedia is a trademark of the Wikimedia Foundation.
+## Detailed description
+Moved out so it can be pasted whole: [`descriptions/en.txt`](descriptions/en.txt) (plain text, nothing else in the file).
 
 ## Single purpose (dashboard → Privacy practices)
 Restyles Wikipedia article pages into a clean reading layout (table of contents, themes, previews, bookmarks) without changing the article text.

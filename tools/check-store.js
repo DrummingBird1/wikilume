@@ -53,12 +53,21 @@ for (const [code, folder] of LISTING_LANGS) {
     fail(`${lf} is missing (store listings must exist in all 8 languages)`);
     continue;
   }
-  const text = fs.readFileSync(path.join(root, lf), 'utf8');
-  if (desc && !text.includes(desc)) fail(`${lf}: short description differs from _locales/${folder}/messages.json`);
-  if (!/storage/.test(text)) fail(`${lf}: does not mention the "storage" permission`);
-  if (!/CC BY-SA 4\.0/.test(text)) fail(`${lf}: lacks the CC BY-SA 4.0 notice`);
-  if (text.length > 16000) fail(`${lf}: longer than the store's 16,000 characters`);
+  const notes = fs.readFileSync(path.join(root, lf), 'utf8');
+  if (desc && !notes.includes(desc)) fail(`${lf}: short description differs from _locales/${folder}/messages.json`);
   ok.push(lf);
+  // the detailed description is its own plain-text file, so it can be pasted whole into the dashboard
+  const df = `store/descriptions/${code}.txt`;
+  if (!fs.existsSync(path.join(root, df))) {
+    fail(`${df} is missing (the detailed description of each language lives in its own file)`);
+    continue;
+  }
+  const text = fs.readFileSync(path.join(root, df), 'utf8');
+  if (!/storage/.test(text)) fail(`${df}: does not mention the "storage" permission`);
+  if (!/CC BY-SA 4\.0/.test(text)) fail(`${df}: lacks the CC BY-SA 4.0 notice`);
+  if (/^#|`/.test(text)) fail(`${df}: contains Markdown (headings or backticks); the store shows plain text`);
+  if (text.length > 16000) fail(`${df}: longer than the store's 16,000 characters`);
+  ok.push(df);
 }
 if (manifest.default_locale !== 'en') fail('default_locale must be en');
 if (JSON.stringify(manifest.permissions) !== '["storage"]') fail('permissions changed: update store/listing.en.md justification and the privacy policy first');
