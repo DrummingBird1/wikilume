@@ -8,6 +8,7 @@ Everything the store asks for is in this folder. What is left needs the owner (a
 | Extension package | `npm run pack` → `dist/wikilume-<version>-chrome.zip` |
 | Icon 128×128 | `icons/icon128.png` (in the zip) |
 | 5 screenshots 1280×800 | `store/screenshots/` (real Wikipedia, real extension code; regenerate with `npm run screenshots`) |
+| 5 screenshots per listing language | `store/screenshots/<code>/` (that language's own Wikipedia; regenerate with `npm run screenshots:langs`, needs internet) |
 | Small promo tile 440×280, marquee 1400×560 | `store/promo-*.png` |
 | Listing text in 8 languages (en, he, es, fr, de, pt-BR, ru, ja) | `store/listing.<code>.md`; name and short description also in `_locales/<code>/messages.json` |
 | Single purpose, permission reasons, data disclosures | `store/listing.en.md` |

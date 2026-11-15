@@ -16,6 +16,7 @@
     "icons": "node tools/make-icons.js",
     "site": "node tools/build-site.js",
     "check-store": "node tools/check-store.js",
-    "screenshots": "node tools/make-screenshots.js && node tools/make-promo.js"
+    "screenshots": "node tools/make-screenshots.js && node tools/make-promo.js",
+    "screenshots:langs": "node tools/make-screenshots-langs.js"
   }
 }
