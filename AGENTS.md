@@ -70,11 +70,38 @@ Load it manually: `chrome://extensions` → Developer mode → Load unpacked →
   the lightbox falls back to the small image if the large one fails.
 - Wikipedia's own page-preview popups are suppressed in the capture phase on our links; do not stop other events there.
 
+## Status
+WikiLume 1.0.0 is **published** in the Chrome Web Store (2026-11-10) and the repository is **public** (MIT).
+- Store listing: https://chromewebstore.google.com/detail/wikilume-%E2%80%93-clean-wikipedi/ijfhflgjhfnjfcjhcbfhgedpmgkikdlj
+- Repository and issues: https://github.com/DrummingBird1/wikilume (default branch `main`)
+- Project site and privacy policy: https://drummingbird1.github.io/wikilume/ (built from `site/` by `.github/workflows/pages.yml`)
+- Anything you commit is public. Keep personal notes, paths, e-mail addresses and secrets out of tracked files.
+- Behaviour changes reach real users: keep permissions, `store/listing.en.md`, `site/privacy.html` and the code in step
+  (`npm run check-store` guards the permission list).
+
 ## Git and releases
-- Work on a branch; prefer pull requests. Never force-push. Do **not** push, add or change a remote, or publish to a browser
-  store without the owner's explicit approval.
+- Work on a branch and open a pull request into `main`; CI (`.github/workflows/ci.yml`) runs `npm run verify`. Never force-push,
+  never rewrite `main`, never flip the repository between public and private.
+- Pushing a branch and opening a PR for the task you were given is fine. Without the owner's explicit approval do **not** push to
+  `main` directly, add or change a remote, create tags/releases, or publish a new version to the Chrome Web Store.
 - Do not commit `dist/`, secrets or `.env` files.
+- A GitHub Pages deploy sometimes does not start after a push: `gh workflow run pages.yml --ref main` starts it by hand.
 - Definition of done: `npm run verify` passes, `npm run e2e` passes for UI changes (or say why it was not run), docs updated
   (`README.md` and `README.en.md` for user-facing changes, `docs/` for design changes), and the report states what was **not** tested.
+
+### Releasing a new version (the upload needs the owner)
+1. Bump `manifest.json` and `package.json` together.
+2. `npm run verify && npm run e2e && npm run pack && npm run check-store`.
+3. If the UI changed, regenerate the store screenshots (`npm run screenshots`) and update the listing text.
+4. Merge the PR; the owner uploads `dist/wikilume-<version>-chrome.zip` in the developer dashboard (see `store/PUBLISHING.md`).
+
+## Working with several agents
+- `CLAUDE.md`, `GEMINI.md` and `.github/copilot-instructions.md` all point back to this file; keep the real rules only here.
+- Check `docs/BACKLOG.md` before starting and update it when you finish or discover something. The flow for human contributors
+  is in `CONTRIBUTING.md`.
+- Two agents should not edit the same files at once: use a separate branch or `git worktree` per task.
+- Automated e2e needs Chrome for Testing (branded Chrome ignores `--load-extension`); set `CHROME_PATH`. Some e2e checks
+  (summary, `storage.sync` language, second-tab bookmark) are flaky there and also fail on older commits: re-run before assuming
+  you broke them, and report them as flaky instead of fixing silently.
 
 If a `HANDOFF.local.md` exists next to this file, read it first: it is a local, untracked snapshot of the current state.

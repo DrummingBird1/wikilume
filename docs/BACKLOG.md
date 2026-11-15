@@ -28,14 +28,17 @@ Open work, known risks and decisions waiting for the owner. Update this file whe
   `npm run e2e` with `CHROME_PATH` pointing at headless Edge currently fails: the summary check never settles and a bookmark
   saved in one tab disappears once a second tab opens (Chrome passes). Unknown whether this is headless-Edge/harness-only or a
   real storage problem, so try bookmarks in a normal Edge window first.
-- [ ] The CI workflow in `.github/workflows/ci.yml` has never run (no remote yet).
+- [ ] The CI workflow in `.github/workflows/ci.yml` has no run yet (pushes did not trigger it); it now also has `workflow_dispatch`,
+  so `gh workflow run ci.yml --ref <branch>` starts it. Confirm it is green once.
+- [ ] Install the published listing from the Web Store in a normal Chrome and open one article.
+- [ ] Hebrew store listing in the dashboard (text in `store/listing.he.md`).
+- [ ] Trademark registry search for "WikiLume" (USPTO, EUIPO, Israel Patent Office); see `store/NAME-CHECK.md`.
+- [ ] Flaky e2e checks under Chrome for Testing (summary, `storage.sync` language persistence, second-tab bookmark).
 
-## Decisions waiting for the owner
-- **License:** none chosen. Without one, nobody else may reuse the code. Wikipedia text stays CC BY-SA 4.0 regardless.
-- **Hosting:** the repository has no remote. Sharing it with other people or agents needs a remote (or a `git bundle`).
-  Creating a remote and pushing needs the owner's explicit approval.
-- **Store release:** needs a developer account and store screenshots. Check each store's branding policy for names containing
-  "Wikipedia" before choosing the listing name.
+## Decided
+- **License:** MIT (`LICENSE`), holder DrummingBird1. Wikipedia text stays CC BY-SA 4.0.
+- **Hosting:** public repository https://github.com/DrummingBird1/wikilume, site on GitHub Pages.
+- **Store release:** published 2026-11-10 (see `AGENTS.md` for the listing URL). Later releases: `AGENTS.md` → "Releasing a new version".
 
 ## Known limitations
 - Summary does not work for Hebrew (Chrome's model writes en/es/ja only) and needs desktop Chrome with on-device AI.
