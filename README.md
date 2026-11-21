@@ -1,77 +1,44 @@
-# WikiLume – קריאה נקייה בוויקיפדיה (תוסף כרום, חינמי לגמרי)
+# WikiLume – a clean Wikipedia reader (browser extension, completely free)
 
-עברית · [English](README.en.md) · למפתחים וסוכנים: [AGENTS.md](AGENTS.md)
+[עברית](README.he.md) · English
 
-תוסף בהשראת Wikiwand: מחליף את מעטפת ויקיפדיה בתצוגת קריאה מודרנית. **הכול חינם, בלי חשבון, בלי מנוי ובלי שרתים חיצוניים** – התוסף מדבר רק עם ה-API של ויקיפדיה עצמה.
+Inspired by Wikiwand: WikiLume replaces Wikipedia's page chrome with a modern reading layout. **Everything is free: no account, no
+subscription, no analytics, no third-party servers.** It talks only to Wikipedia's own APIs.
 
-## מה יש בפנים
-- פריסה נקייה: כותרת גדולה, תיאור קצר, זמן קריאה ותאריך עדכון
-- תוכן עניינים צף עם הדגשת הסעיף הנוכחי (ובמסך צר – מגירה)
-- תיבת המידע (infobox) בעמודה צדדית ("פרטים מהירים" במסך צר)
-- ערכות נושא: אוטומטי / בהיר / ספיה / כהה (כולל התאמה של טבלאות, תבניות ונוסחאות)
-- גופן, גודל טקסט ורוחב קריאה, שמירה אוטומטית ב-Chrome Sync
-- תצוגה מקדימה בריחוף על קישורים ועל הערות שוליים
-- חיפוש עם השלמה אוטומטית (קיצור: `/`), ערך אקראי, מעבר שפות עם סינון
-- **חיפוש בכמה שפות:** בתיבת החיפוש יש כפתור לבחירת שפות נוספות (רשימה של 34 שפות). התוצאות שלהן מופיעות לצד תוצאות הוויקיפדיה הנוכחית עם תג שפה, והבחירה נשמרת
-- **סיכום:** כפתור "סיכום" בראש הערך. הסיכום נכתב במחשב שלך, על ידי ה-AI המובנה של Chrome (בלי חשבון, בלי מפתח ובלי שליחת טקסט החוצה). בפעם הראשונה Chrome צריך להוריד מודל של כמה ג׳יגה, ולכן התוסף שואל לפני ההורדה. כשהסיכום לא זמין (דפדפן אחר, חומרה, או שפה לא נתמכת) מוצג פתיח הערך במקום
-- **היסטוריית קריאה:** כפתור "המשך קריאה" ולשונית "היסטוריה" בחלונית התוסף; נשמרת מקומית בלבד (200 אחרונים), אפשר לכבות או לנקות
-- **קיצורי מקלדת:** `/` חיפוש, `b` סימנייה, `t` ערכת נושא, `o` תצוגה מקורית, `s` סיכום, `?` עזרה; `Alt+Shift+W` (אפשר לשנות ב-`chrome://extensions/shortcuts`) מחליף בין התוסף לתצוגה המקורית
-- **ציר זמן (בנוסף מוויקינתונים: תאריכי לידה, פטירה והקמה של נושא הערך):** כפתור "ציר זמן" מופיע בערכים עם מספיק תאריכים. האירועים נבחרים אוטומטית מהטקסט (משפטים עם שנה), וקליקה על אירוע קופצת אליו בערך
-- **תמונת קאבר:** כשתמונת הפתיח רחבה היא מוצגת כבאנר מעל הערך (אפשר לכבות בהגדרות)
-- **תצוגת תמונות מוגדלת:** קליק על תמונה בערך פותח אותה בגדול עם כיתוב, מעבר בין התמונות בחצים, וסגירה ב-Esc
-- האזנה לערך (הקראה בקול של הדפדפן)
-- **סימניות:** כפתור "שמירה" בראש כל ערך, תפריט סימניות בכותרת ולשונית "סימניות" בחלונית התוסף. אפשר לסנן, להסיר, לייצא לקובץ JSON ולייבא (ייבוא מתוך תפריט הסימניות בדף ערך). בלי הגבלת כמות, הכול נשמר מקומית בדפדפן
-- RTL מלא – עברית וערבית נראות מצוין; ממשק בעברית או באנגלית
-- כפתור "תצוגה מקורית" לכל לשונית, וכיבוי מהיר מהתפריט או מהחלונית של התוסף
-- שימור שיוך: הערך נשאר תחת CC BY-SA עם קישור לערך המקורי ולהיסטוריית העריכות
+## Features
+- Clean layout: large title, description, reading time, last-edited date; sticky table of contents with scroll-spy
+- Infobox in a side column; themes (auto, light, sepia, dark); font, text size and reading width
+- Hover previews for links and citations; search with suggestions (shortcut `/`), random article, language switcher
+- **Multi-language search:** tick extra Wikipedias next to the search box; their results appear beside the current one
+- **Bookmarks:** save articles, filter, export/import as JSON, shown in the page and in the toolbar popup
+- **Summary:** written on your device by Chrome's built-in AI (asks before the one-time multi-GB model download); falls back to
+  the article's opening when unavailable. English, Spanish and Japanese only, so not Hebrew
+- **Timeline:** dated events picked from the article text (heuristic), plus birth/death/founding dates of the subject from Wikidata
+- **Reading history:** "continue reading" chip and a History tab in the popup; local only, newest 200, can be switched off or cleared
+- **Keyboard shortcuts:** `/` search, `b` bookmark, `t` theme, `o` original view, `s` summary, `?` help; `Alt+Shift+W` (rebind at `chrome://extensions/shortcuts`) switches between the reader and Wikipedia's own view
+- Wide cover photo for landscape lead images, and an image lightbox with captions and keyboard navigation
+- Read-aloud, full RTL support, English or Hebrew interface, "original view" per tab
 
-## התקנה (מצב מפתח)
-1. פתחו `chrome://extensions`
-2. הפעילו **Developer mode** (פינה ימנית עליונה)
-3. לחצו **Load unpacked** ובחרו את התיקייה `wikilume` (זו שבה נמצא `manifest.json`)
-4. היכנסו לכל ערך בוויקיפדיה – התצוגה החדשה תופיע מיד
+## Install (developer mode)
+1. Open `chrome://extensions` and turn on **Developer mode**
+2. **Load unpacked** and pick this folder (the one containing `manifest.json`)
+3. Open any Wikipedia article
 
-אחרי שינוי בקבצים: `chrome://extensions` ← כפתור הרענון על כרטיס התוסף, ואז רענון הלשונית.
+## Store release
+Screenshots, promo images, listing text (English and Hebrew), the privacy policy and a small project site are in [store/](store/PUBLISHING.md) and `site/`. `npm run screenshots` regenerates the images, `npm run site` the site, `npm run check-store` checks readiness.
 
-## איך זה עובד
-סקריפט התוכן רץ ב-`document_start`, ובודק שזה עמוד ערך רגיל (מרחב שמות ראשי, בלי `action=`, לא עמוד ראשי). אם כן, הוא משאיר את ה-DOM של הערך כמו שוויקיפדיה הגישה אותו (כך תבניות, טבלאות ונוסחאות ממשיכות לעבוד), מסתיר את המעטפת המקורית ומציב את התוכן בתוך פריסה חדשה. כל עמוד אחר (עריכה, היסטוריה, דיון, חיפוש, קטגוריות) נשאר כמו שהוא.
+## Develop
+Node 22+, no dependencies.
 
-מבנה:
-- `manifest.json` – Manifest V3, הרשאה אחת בלבד: `storage`
-- `src/content.js` – הלוגיקה; `src/reader.css` – העיצוב; `src/i18n.js` – מחרוזות והגדרות
-- `src/history.js` – היסטוריית קריאה (מפתח אחד ב-`chrome.storage.local` לכל ערך, עד 200). `src/wikidata.js` – תאריכי נושא הערך מוויקינתונים (פונקציות טהורות). `src/background.js` – פקודת המקלדת בלבד
-- `src/bookmarks.js` – אחסון הסימניות (מפתח אחד ב-`chrome.storage.local` לכל סימנייה, כך שכמה לשוניות לא דורסות זו את זו), ייצוא וייבוא. משותף לסקריפט התוכן ולחלונית
-- `src/timeline.js` – חילוץ אירועים מתוארכים מטקסט הערך (פונקציות נקיות, בלי רשת)
-- `src/summary.js` – עטיפה ל-Summarizer המובנה של Chrome ופונקציות עזר, כולל גיבוי לפתיח הערך
-- `popup/` – חלונית התוסף (סימניות, הפעלה/כיבוי, ערכת נושא, שפה)
-- `test/*.test.js` – בדיקות יחידה (סימניות, ציר זמן, סיכום, מחרוזות): `node --test test/*.test.js`
-- `test/e2e/` – שרת דמה שמחקה דף ערך של ויקיפדיה וסקריפטים שמריצים את התוסף ב-Chrome אמיתי (ראו `AGENTS.md`)
-- `tools/make-icons.js` – יוצר את האייקונים (`node tools/make-icons.js`)
-- `tools/pack.js` – אורז קבצי zip להפצה (`node tools/pack.js`)
-- `tools/check.js` – בדיקות סטטיות מהירות (תחביר, הפניות ב-manifest, גרסאות, בלי נתיבים של מחשב מסוים)
-- `package.json` – רק סקריפטים, בלי תלויות: `npm run verify` (בדיקות סטטיות ויחידה), `npm run e2e` (Chrome אמיתי מול אתר דמה), `npm run pack`
-- `docs/ARCHITECTURE.md` – איך זה בנוי ולמה; `docs/BACKLOG.md` – עבודה פתוחה, סיכונים והחלטות שמחכות לבעלים
-- `GEMINI.md`, `.github/copilot-instructions.md`, `CLAUDE.md` – הפניות ל-`AGENTS.md` עבור כלים אחרים
+```bash
+npm run verify   # static checks + unit tests
+npm run e2e      # headless Chrome with the real extension against a mock site (needs Chrome; set CHROME_PATH if not found)
+npm run pack     # dist/wikilume-<version>-chrome.zip and -firefox.zip
+```
 
-הסימניות נשמרות ב-`chrome.storage.local` (עד 10MB, עשרות אלפי ערכים) ולא ב-Sync, כי ל-Sync יש מכסה קטנה. כדי להעביר סימניות בין מחשבים משתמשים בייצוא וייבוא. קובץ ייבוא נחשב לא אמין: כל רשומה נבדקת מחדש, מתקבלים רק מארחים של `*.wikipedia.org` ותמונות מ-`upload.wikimedia.org`.
+Contributing humans and AI agents: start with [AGENTS.md](AGENTS.md), then [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and
+[docs/BACKLOG.md](docs/BACKLOG.md).
 
-## פרסום בחנות
-צילומי מסך, תמונות קידום, טקסטי החנות (עברית ואנגלית), מדיניות פרטיות ואתר קטן נמצאים ב-[store/](store/PUBLISHING.md) וב-`site/`. `npm run screenshots` מייצר את התמונות, `npm run site` את האתר ו-`npm run check-store` בודק מוכנות.
-
-## אריזה והפצה
-`node tools/pack.js` יוצר בתיקייה `dist/` (לא נכנסת לגיט) שני קבצים:
-- `wikilume-<גרסה>-chrome.zip` – לחנות של Chrome. אותה חבילה אמורה לעבוד גם ב-Edge ובדפדפני Chromium אחרים (לא נבדק)
-- `wikilume-<גרסה>-firefox.zip` – אותה חבילה עם `browser_specific_settings`. **לא נבדק ב-Firefox.** מזהה התוסף שם הוא placeholder (`wikilume@wikilume.invalid`), וצריך להחליף אותו במזהה שבשליטתכם לפני הגשה ל-addons.mozilla.org
-
-פרסום בחנויות דורש חשבון מפתח משלכם ותמונות מסך לכרטיס התוסף, ולכן לא נעשה כאן.
-
-## מגבלות ידועות
-- פעיל על `*.wikipedia.org` בלבד (לא על האתר הנייד `m.wikipedia.org` ולא על אתרי Wikimedia אחרים)
-- **הסיכום המקומי לא עובד בעברית.** ה-AI המובנה של Chrome כותב כרגע רק באנגלית, ספרדית ויפנית, ולכן בערכים בעברית מוצג פתיח הערך במקום סיכום. הוא גם דורש דסקטופ עם חומרה מתאימה ו-Chrome עדכני
-- ציר הזמן הוא היוריסטיקה (משפטים עם שנה), לא הבנה של הטקסט: אירועים יכולים להיחמץ, ולפעמים מספר שאינו שנה נתפס כשנה
-- בתצוגה המוגדלת התוסף מבקש מויקימדיה גרסה גדולה של התמונה. אם היא לא זמינה, חוזרים לגרסה הקטנה
-- בערכים עם תבניות צבעוניות מאוד, מצב כהה משתמש בהיפוך צבעים אוטומטי ולכן לא תמיד מושלם
-- הכול נבדק על דף דמה ובטעינה אמיתית ב-Chrome, לא על ויקיפדיה האמיתית
-
-## רישיון
-הקוד ברישיון MIT (ראו `LICENSE`). הטקסט של ויקיפדיה ברישיון CC BY-SA 4.0.
+## Status
+Tested on a hand-written mock Wikipedia and in a real Chrome profile; **not yet verified on real Wikipedia articles**. Firefox and
+Edge are untested. The code is MIT licensed (see `LICENSE`); Wikipedia's text is CC BY-SA 4.0.
