@@ -23,7 +23,7 @@ The full list is in [AGENTS.md](AGENTS.md); the short version:
 1. Branch from `main`, keep the change focused.
 2. Add a unit test for pure logic, or an e2e assertion for UI behaviour.
 3. Run `npm run verify` (and `npm run e2e` for UI changes) and say in the PR which you ran and what you did not test.
-4. Update `README.md` / `README.en.md` for user-facing changes and `docs/` for design changes.
+4. Update `README.md` / `README.he.md` for user-facing changes and `docs/` for design changes.
 
 ## Bugs and ideas
 Open an issue at https://github.com/DrummingBird1/wikilume/issues. For a bug, include the article URL, your Chrome version, the

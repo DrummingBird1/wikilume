@@ -3,7 +3,7 @@
 WikiLume is a Manifest V3 browser extension (Chrome first) that replaces Wikipedia's page chrome with a clean reading layout:
 table of contents, infobox column, themes, link previews, bookmarks, multi-language search, timeline, on-device summary,
 cover photo, lightbox. Plain JavaScript, no build step, **no dependencies**. Reply in the language the user writes in
-(the owner mostly writes Hebrew); code, comments and docs stay in English, with the README also available in Hebrew.
+(the owner mostly writes Hebrew); code, comments and docs stay in English, with the README (English, `README.md`) also available in Hebrew (`README.he.md`).
 
 <!-- BEGIN core-rules v1 (generated from the shared core-rules.md; do not edit by hand) -->
 ## Core rules (apply to every agent)
@@ -105,7 +105,7 @@ WikiLume 1.0.0 is **published** in the Chrome Web Store (2026-11-10) and the rep
   domain, data handling, or a big UI change), update **all eight** in the same PR; `npm run check-store` checks that they exist, fit the limits
   and still list the current permission. Keep the same structure in every language (short description, "what you get", "private by design", "how it works").
 - Definition of done: `npm run verify` passes, `npm run e2e` passes for UI changes (or say why it was not run), docs updated
-  (`README.md` and `README.en.md` for user-facing changes, `docs/` for design changes), and the report states what was **not** tested.
+  (`README.md` (English) and `README.he.md` (Hebrew) for user-facing changes, `docs/` for design changes), and the report states what was **not** tested.
 
 ### Releasing a new version (the upload needs the owner)
 1. Bump `manifest.json` and `package.json` together.
